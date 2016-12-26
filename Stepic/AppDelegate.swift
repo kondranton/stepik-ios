@@ -1,4 +1,4 @@
- //
+  //
 //  AppDelegate.swift
 //  Stepic
 //
@@ -15,7 +15,10 @@ import FirebaseMessaging
 import IQKeyboardManagerSwift
 import SVProgressHUD
 import MagicalRecord
- 
+import VK_ios_sdk
+import FBSDKCoreKit
+//import YandexMobileMetrica
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -37,6 +40,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FIRApp.configure()
         FIRAppIndexing.sharedInstance().registerApp(1064581926)
         
+        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        
+//        YMMYandexMetrica.activate(withApiKey: "fd479031-bdf4-419e-8d8f-6895aab23502")
+        
         NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.didReceiveRegistrationToken(_:)), name: NSNotification.Name.firInstanceIDTokenRefresh, object: nil)
         
         ExecutionQueues.sharedQueues.setUpQueueObservers()
@@ -56,6 +63,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NotificationRegistrator.sharedInstance.registerForRemoteNotifications(application)
         }
         
+        if let localNotificationDict = launchOptions?[UIApplicationLaunchOptionsKey.localNotification] as? [NSString: AnyObject] {
+            handleLocalNotification(localNotificationDict)
+        }
+        
         if let notificationDict = launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] as? [NSString: AnyObject] {
             handleNotification(notificationDict)
         }
@@ -66,6 +77,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
+    func handleLocalNotification(_ localNotificationDict: [NSString: AnyObject]) {
+        AnalyticsReporter.reportEvent(AnalyticsEvents.Streaks.notificationOpened, parameters: nil)
+    }
+        
     fileprivate func handleNotification(_ notificationDict: [NSString: AnyObject]) {
         if let reaction = NotificationReactionHandler().handleNotificationWithUserInfo(notificationDict), 
             let topController = currentNavigation?.topViewController {
@@ -75,7 +90,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var currentNavigation : UINavigationController? {
         if let tabController = window?.rootViewController as? UITabBarController {
-            return tabController.viewControllers?[tabController.selectedIndex] as? UINavigationController
+            let cnt = tabController.viewControllers?.count ?? 0
+            let index = tabController.selectedIndex
+            if index < cnt {
+                return tabController.viewControllers?[tabController.selectedIndex] as? UINavigationController
+            } else {
+                return tabController.viewControllers?[0] as? UINavigationController
+            }
         }
         return nil
     }
@@ -147,16 +168,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
-        print("opened app via url \(url.absoluteString)")
-        let codeOpt = Parser.sharedParser.codeFromURL(url)
-        if let code = codeOpt {
-            NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: "ReceivedAuthorizationCodeNotification"), object: self, userInfo: ["code": code])            
-        } else {
-            print("error while authentificating")
-        }
-        return true
-    }
+//    func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
+//        print("opened app via url \(url.absoluteString)")
+//        let codeOpt = Parser.sharedParser.codeFromURL(url)
+//        if let code = codeOpt {
+//            NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: "ReceivedAuthorizationCodeNotification"), object: self, userInfo: ["code": code])            
+//        } else {
+//            print("error while authentificating")
+//        }
+//        return true
+//    }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         NotificationRegistrator.sharedInstance.getGCMRegistrationToken(deviceToken: deviceToken)
@@ -211,6 +232,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
         print("opened app via url \(url.absoluteString)")
+        if VKSdk.processOpen(url, fromApplication: sourceApplication) {
+            return true
+        }
+        if FBSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: sourceApplication, annotation: annotation) {
+            return true
+        }
+        if url.scheme == "vk5628680" || url.scheme == "fb171127739724012" {
+            return true
+        }
         let codeOpt = Parser.sharedParser.codeFromURL(url)
         if let code = codeOpt {
             NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: "ReceivedAuthorizationCodeNotification"), object: self, userInfo: ["code": code])            

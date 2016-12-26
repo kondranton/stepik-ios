@@ -54,7 +54,7 @@ class WebStepViewController: UIViewController {
     var stepText = ""
     
     var stepUrl : String {
-        return "\(StepicApplicationsInfo.stepicURL)/lesson/\(lesson.slug)/step/\(stepId)?from_mobile_app=true"
+        return "\(StepicApplicationsInfo.stepicURL)/lesson/\(lesson.slug)/step/\(stepId ?? 1)?from_mobile_app=true"
     }
     
     var scrollHelper : WebViewHorizontalScrollHelper!
@@ -68,6 +68,8 @@ class WebStepViewController: UIViewController {
         
         stepWebView.scrollView.delegate = self
         stepWebView.scrollView.backgroundColor = UIColor.white
+//        stepWebView.backgroundColor = UIColor.white
+        
         scrollHelper = WebViewHorizontalScrollHelper(webView: stepWebView, onView: self.view, pagerPanRecognizer: stepsVC.pagerScrollView.panGestureRecognizer)
         print(self.view.gestureRecognizers)
         
@@ -79,8 +81,11 @@ class WebStepViewController: UIViewController {
     
     func sharePressed(_ item: UIBarButtonItem) {
         //        AnalyticsReporter.reportEvent(AnalyticsEvents.Syllabus.shared, parameters: nil)
-        let stepid = stepId
-        let slug = lessonSlug!
+        guard let stepid = stepId, 
+            let slug = lessonSlug else {
+            return
+        }
+//        let slug = lessonSlug!
         DispatchQueue.global( priority: DispatchQueue.GlobalQueuePriority.default).async {
             let shareVC = SharingHelper.getSharingController(StepicApplicationsInfo.stepicURL + "/lesson/" + slug + "/step/" + "\(stepid)")
             shareVC.popoverPresentationController?.barButtonItem = item
@@ -357,7 +362,11 @@ extension WebStepViewController : UIWebViewDelegate {
     }
     
     func getContentHeight(_ webView : UIWebView) -> Int {
-        return Int(webView.stringByEvaluatingJavaScript(from: "document.body.scrollHeight;") ?? "0") ?? 0
+        let h = Int(webView.stringByEvaluatingJavaScript(from: "document.body.scrollHeight;") ?? "0") ?? 0
+//        if h != 0 {
+//            return h + 8
+//        } 
+        return h
         //        return Int(webView.scrollView.contentSize.height)
     }
     

@@ -17,6 +17,8 @@ def all_pods
     pod 'Crashlytics'
     pod 'DZNEmptyDataSet'
     
+#    pod 'YandexMobileMetrica/Dynamic', '2.6.2'
+
     pod 'Firebase', '<= 3.4.0'
 #    pod 'Firebase/Messaging'
     pod 'FirebaseAppIndexing', '1.0.4'
@@ -30,7 +32,23 @@ def all_pods
     pod 'Kanna', '~> 2.0.0'
     pod 'CRToast'
     pod 'TUSafariActivity', '~> 1.0'
+    
+    pod "VK-ios-sdk" 
+    pod 'FBSDKCoreKit'
+    pod 'FBSDKLoginKit'
+    
 end
+
+#post_install do |installer|
+#    appmetricaPlistPath = "Pods/YandexMobileMetrica/dynamic/YandexMobileMetrica.framework/Info.plist"
+#    appmetricaVersion = `/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' #{appmetricaPlistPath}`.strip
+#    if ['2.6.0', '2.6.1', '2.6.2'].include? appmetricaVersion
+#        system("/usr/libexec/PlistBuddy -c 'Set :CFBundleIdentifier org.cocoapods.YandexMobileMetrica' #{appmetricaPlistPath}")
+#        system("plutil -convert binary1 #{appmetricaPlistPath}")
+#        else
+#        puts("Please, remove workaround for AppMetrica dynamic framework.")
+#    end
+#end
 
 target 'Stepic' do
     all_pods

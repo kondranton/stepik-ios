@@ -61,7 +61,13 @@ class CoursePreviewViewController: UIViewController {
         
     }
     
-    var displayingInfoType : DisplayingInfoType = .overview 
+    var displayingInfoType : DisplayingInfoType = .overview {
+        didSet {
+            if displayingInfoType == .syllabus {
+                tableView.reloadData()
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,6 +89,7 @@ class CoursePreviewViewController: UIViewController {
             for section in c.sections {
                 sectionTitles += [section.title]
             }
+            print(sectionTitles)
             tableView.reloadData()
             resetHeightConstraints()
             if let introVideo = c.introVideo {
@@ -124,6 +131,7 @@ class CoursePreviewViewController: UIViewController {
                 for section in c.sections {
                     self?.sectionTitles += [section.title]
                 }
+//                print(self?.sectionTitles)
                 self?.isErrorWhileLoadingSections = false
                 self?.isLoadingSections = false
                 UIThread.performUI{ self?.tableView.reloadData() }
@@ -137,11 +145,11 @@ class CoursePreviewViewController: UIViewController {
             }
         
             isLoadingSections = true
-            if AuthInfo.shared.isAuthorized {
+//            if AuthInfo.shared.isAuthorized {
                 c.loadAllSections(success: successBlock, error: errorBlock, withProgresses: false)
-            } else {
-                c.loadSectionsWithoutAuth(success: successBlock, error: errorBlock)
-            }
+//            } else {
+//                c.loadSectionsWithoutAuth(success: successBlock, error: errorBlock)
+//            }
         }
     }
     
@@ -299,6 +307,7 @@ class CoursePreviewViewController: UIViewController {
         }
         
         if !AuthInfo.shared.isAuthorized {
+            AnalyticsReporter.reportEvent(AnalyticsEvents.CourseOverview.JoinPressed.anonymous, parameters: nil)
             if let vc = ControllerHelper.getAuthController() as? AuthNavigationViewController {
                 vc.success = {
                     [weak self] in
@@ -309,6 +318,8 @@ class CoursePreviewViewController: UIViewController {
                 self.present(vc, animated: true, completion: nil)
             }
             return
+        } else {
+            AnalyticsReporter.reportEvent(AnalyticsEvents.CourseOverview.JoinPressed.signed, parameters: nil)
         }
         
         //TODO : Add statuses
@@ -389,6 +400,7 @@ extension CoursePreviewViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
+            print(max(textData[0].count, textData[1].count, sectionTitles.count, 1))
             return max(textData[0].count, textData[1].count, sectionTitles.count, 1)
         default: 
             return 0
