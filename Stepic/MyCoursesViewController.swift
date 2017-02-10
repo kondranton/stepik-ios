@@ -28,10 +28,10 @@ class MyCoursesViewController: CoursesViewController {
         super.viewDidLoad()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        handleCourseUpdates()
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        handleCourseUpdates()
+//    }
     
     fileprivate func getExistingIndexPathsFromCourses(_ newCourses: [Course]) -> [IndexPath] {
         return newCourses.flatMap{ 
@@ -42,8 +42,14 @@ class MyCoursesViewController: CoursesViewController {
         }
     }
     
+    override func onRefresh() {
+        if #available(iOS 9.0, *) {
+            WatchDataHelper.parseAndAddPlainCourses(self.courses)
+        }
+    }
+
     
-    func handleCourseUpdates() {
+    override func handleCourseUpdates() {
         if CoursesJoinManager.sharedManager.hasUpdates {
             print("deleting courses -> \(CoursesJoinManager.sharedManager.deletedCourses.count)")
             print("adding courses -> \(CoursesJoinManager.sharedManager.addedCourses.count)")
@@ -59,7 +65,9 @@ class MyCoursesViewController: CoursesViewController {
             
             let addedCourses = getNonExistingCourses(CoursesJoinManager.sharedManager.addedCourses)
             if addedCourses.count != 0 { 
+                print("before: \(courses)")
                 courses = addedCourses + courses
+                print("after: \(courses)")
                 tabIds = tabIds + courses.map{return $0.id}
                 tableView.insertRows(at: (0..<addedCourses.count).map({return IndexPath(row: $0, section: 0)}), with: .automatic)
             }
@@ -67,6 +75,7 @@ class MyCoursesViewController: CoursesViewController {
             self.tableView.endUpdates()
             
             CoursesJoinManager.sharedManager.clean()
+            self.onRefresh()
         }
     }
     

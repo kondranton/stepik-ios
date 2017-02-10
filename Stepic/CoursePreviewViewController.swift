@@ -327,30 +327,42 @@ class CoursePreviewViewController: UIViewController {
             
             if sender.isEnabledToJoin {
                 SVProgressHUD.show()
+                sender.isEnabled = false
                 AuthManager.sharedManager.joinCourseWithId(c.id, success : {
                     SVProgressHUD.showSuccess(withStatus: "")
+                    sender.isEnabled = true
                     sender.setDisabledJoined()
                     self.course?.enrolled = true
                     CoreDataHelper.instance.save()
                     CoursesJoinManager.sharedManager.addedCourses += [c]
+                    if #available(iOS 9.0, *) {
+                        WatchDataHelper.parseAndAddPlainCourses(WatchCoursesDisplayingHelper.getCurrentlyDisplayingCourses())
+                    } 
                     self.performSegue(withIdentifier: "showSections", sender: nil)
                     }, error:  {
                         status in
                         SVProgressHUD.showError(withStatus: status)
+                        sender.isEnabled = true
                 }) 
             } else {
                 askForUnenroll(unenroll: {
                     SVProgressHUD.show()
+                    sender.isEnabled = false
                     AuthManager.sharedManager.joinCourseWithId(c.id, delete: true, success : {
                         SVProgressHUD.showSuccess(withStatus: "")
+                        sender.isEnabled = true
                         sender.setEnabledJoined()
                         self.course?.enrolled = false
                         CoreDataHelper.instance.save()
                         CoursesJoinManager.sharedManager.deletedCourses += [c]
+                        if #available(iOS 9.0, *) {
+                            WatchDataHelper.parseAndAddPlainCourses(WatchCoursesDisplayingHelper.getCurrentlyDisplayingCourses())
+                        } 
                         self.navigationController?.popToRootViewController(animated: true)
                         }, error:  {
                             status in
                             SVProgressHUD.showError(withStatus: status)
+                            sender.isEnabled = true
                     })
                 })
             }

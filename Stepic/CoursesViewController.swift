@@ -1,3 +1,4 @@
+
 //
 //  CoursesViewController.swift
 //  Stepic
@@ -74,9 +75,16 @@ class CoursesViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyDa
         if lastUser != AuthInfo.shared.user {
             refreshControl?.beginRefreshing()
             getCachedCourses(completion: {
+                self.handleCourseUpdates()
                 self.refreshCourses()
             })
+        } else {
+            self.handleCourseUpdates()
         }
+    }
+    
+    func handleCourseUpdates() {
+        //override this method in subclass
     }
     
     fileprivate func getCachedCourses(completion: ((Void) -> Void)?) {
@@ -87,15 +95,20 @@ class CoursesViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyDa
                 let cachedIds = self.tabIds 
                 let c = try Course.getCourses(cachedIds)
                 self.courses = Sorter.sort(c, byIds: cachedIds)
+                print("got cached courses \(self.courses.count): \(cachedIds)\n")
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
+                    completion?()
                 }       
-                completion?()
             }
             catch {
                 print("Error while fetching data from store")
             }
         }
+    }
+    
+    
+    func onRefresh() {
     }
     
     
@@ -107,31 +120,63 @@ class CoursesViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyDa
                 ApiDataDownloader.sharedDownloader.getCoursesByIds(ids, deleteCourses: Course.getAllCourses(), refreshMode: .update, success: { 
                     (newCourses) -> Void in
                     
-                    self.courses = Sorter.sort(newCourses, byIds: ids)
-                    self.meta = meta
-                    self.currentPage = 1
-                    self.tabIds = ids
-                    DispatchQueue.main.async {
-                        self.emptyDatasetState = .empty
-                        self.refreshControl?.endRefreshing()
-                        self.tableView.reloadData()
+                    let coursesCompletion = {
+                        self.courses = Sorter.sort(newCourses, byIds: ids)
+                        self.meta = meta
+                        self.currentPage = 1
+                        self.tabIds = ids
+                        
+                        DispatchQueue.main.async {
+                            self.onRefresh()
+                            self.emptyDatasetState = .empty
+                            self.refreshControl?.endRefreshing()
+                            self.tableView.reloadData()
+                        }
+                        
+                        self.lastUser = AuthInfo.shared.user
+                        self.isRefreshing = false
                     }
-                    self.lastUser = AuthInfo.shared.user
-                    self.isRefreshing = false
+                    
+                    var progressIds : [String] = []
+                    var progresses : [Progress] = []
+                    for course in newCourses {
+                        if let progressId = course.progressId {
+                            progressIds += [progressId]
+                        }
+                        if let progress = course.progress {
+                            progresses += [progress]
+                        }
+                    }
+                    
+                    _ = ApiDataDownloader.sharedDownloader.getProgressesByIds(progressIds, deleteProgresses: progresses,refreshMode: .update, success: { 
+                        (newProgresses) -> Void in
+                        progresses = Sorter.sort(newProgresses, byIds: progressIds)
+                        for i in 0 ..< min(newCourses.count, progresses.count) {
+                            newCourses[i].progress = progresses[i]
+                        }
+                            
+                        CoreDataHelper.instance.save()
+                        coursesCompletion()
                     }, failure: { 
                         (error) -> Void in
-                        print("failed downloading courses data in refresh")
-                        self.handleRefreshError()
-                })
-                
+                        coursesCompletion()
+                        print("Error while dowloading progresses")
+                    })
+            
+                    
                 }, failure: { 
                     (error) -> Void in
-                    print("failed refreshing course ids in refresh")
+                    print("failed downloading courses data in refresh")
                     self.handleRefreshError()
-                    
-            })
-            }, error:  {
+                })
+                
+            }, failure: { 
+                (error) -> Void in
+                print("failed refreshing course ids in refresh")
                 self.handleRefreshError()
+            })
+        }, error:  {
+            self.handleRefreshError()
         })
     }
     
@@ -293,7 +338,17 @@ extension CoursesViewController : UITableViewDelegate {
         }
     }
     
+    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        return (indexPath as NSIndexPath).row < courses.count
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        guard (indexPath as NSIndexPath).row < courses.count else {
+            tableView.deselectRow(at: indexPath, animated: true)
+            return
+        }
+        
         if courses[(indexPath as NSIndexPath).row].enrolled {
             self.performSegue(withIdentifier: "showSections", sender: courses[(indexPath as NSIndexPath).row])
         } else {

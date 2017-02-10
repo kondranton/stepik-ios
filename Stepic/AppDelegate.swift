@@ -17,7 +17,8 @@ import SVProgressHUD
 import MagicalRecord
 import VK_ios_sdk
 import FBSDKCoreKit
-//import YandexMobileMetrica
+import Mixpanel
+import YandexMobileMetrica
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -27,6 +28,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         Fabric.with([Crashlytics.self])
+		
+		if #available(iOS 9.0, *) {
+			WatchSessionManager.sharedManager.startSession()
+		}
         
         MagicalRecord.setupCoreDataStackWithAutoMigratingSqliteStore(at: CoreDataHelper.instance.storeURL as URL)
         SVProgressHUD.setMinimumDismissTimeInterval(0.5)
@@ -40,9 +45,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FIRApp.configure()
         FIRAppIndexing.sharedInstance().registerApp(1064581926)
         
+        Mixpanel.initialize(token: "cc80751831012d6a0de6bba73ec2f556")
+        AnalyticsReporter.reportMixpanelEvent(AnalyticsEvents.App.opened, parameters: nil)
+        
+        
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
-//        YMMYandexMetrica.activate(withApiKey: "fd479031-bdf4-419e-8d8f-6895aab23502")
+        YMMYandexMetrica.activate(withApiKey: "fd479031-bdf4-419e-8d8f-6895aab23502")
         
         NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.didReceiveRegistrationToken(_:)), name: NSNotification.Name.firInstanceIDTokenRefresh, object: nil)
         
@@ -62,9 +71,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if AuthInfo.shared.isAuthorized {
             NotificationRegistrator.sharedInstance.registerForRemoteNotifications(application)
         }
-        
-        if let localNotificationDict = launchOptions?[UIApplicationLaunchOptionsKey.localNotification] as? [NSString: AnyObject] {
-            handleLocalNotification(localNotificationDict)
+                
+        if (launchOptions?[UIApplicationLaunchOptionsKey.localNotification]) != nil  {
+            handleLocalNotification()
         }
         
         if let notificationDict = launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] as? [NSString: AnyObject] {
@@ -77,7 +86,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    func handleLocalNotification(_ localNotificationDict: [NSString: AnyObject]) {
+    func handleLocalNotification() {
         AnalyticsReporter.reportEvent(AnalyticsEvents.Streaks.notificationOpened, parameters: nil)
     }
         
