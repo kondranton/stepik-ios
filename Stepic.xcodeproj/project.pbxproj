@@ -204,8 +204,6 @@
 		0861E6761CD8106E00B45652 /* ExecutionQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0861E6741CD8106E00B45652 /* ExecutionQueue.swift */; };
 		0861E67B1CD9483500B45652 /* ExecutionQueues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0861E67A1CD9483500B45652 /* ExecutionQueues.swift */; };
 		0861E67C1CD9483500B45652 /* ExecutionQueues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0861E67A1CD9483500B45652 /* ExecutionQueues.swift */; };
-		08666B5A1E11C53D00799731 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 08666B5C1E11C53D00799731 /* Localizable.strings */; };
-		08666B611E11C57500799731 /* Localizables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08666B601E11C57500799731 /* Localizables.swift */; };
 		086702411DB167DC005006AE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0867023F1DB167D5005006AE /* GoogleService-Info.plist */; };
 		08687BAE1BACB43700F5BDE1 /* RefreshTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08687BAC1BACB43700F5BDE1 /* RefreshTableViewCell.swift */; };
 		08687BAF1BACB43700F5BDE1 /* RefreshTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08687BAD1BACB43700F5BDE1 /* RefreshTableViewCell.xib */; };
@@ -638,35 +636,14 @@
 		08FF75301DF9B89000D656C4 /* StreaksStepikAlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08FF752F1DF9B89000D656C4 /* StreaksStepikAlertManager.swift */; };
 		08FF75311DF9B89000D656C4 /* StreaksStepikAlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08FF752F1DF9B89000D656C4 /* StreaksStepikAlertManager.swift */; };
 		572BF3DA6DE2DAE16D7E15C8 /* Pods_StepicTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A39D9733A6BA339399F0478 /* Pods_StepicTests.framework */; };
-		828CF38E1E0866E40058ACFC /* clock.png in Resources */ = {isa = PBXBuildFile; fileRef = 828CF38D1E0866E40058ACFC /* clock.png */; };
 		9F5F3D711E08783E00000423 /* CourseMetainfoEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F5F3D701E08783E00000423 /* CourseMetainfoEntity.swift */; };
-		9F5F3D721E087A6E00000423 /* CourseMetainfoEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F5F3D701E08783E00000423 /* CourseMetainfoEntity.swift */; };
-		9F9C711B1E076AE000EC8DA3 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9F9C71191E076AE000EC8DA3 /* Interface.storyboard */; };
-		9F9C711D1E076AE000EC8DA3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9F9C711C1E076AE000EC8DA3 /* Assets.xcassets */; };
-		9F9C71241E076AE100EC8DA3 /* StepicWatch Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9F9C71231E076AE000EC8DA3 /* StepicWatch Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		9F9C712D1E076AE100EC8DA3 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9C712C1E076AE100EC8DA3 /* ComplicationController.swift */; };
-		9F9C712F1E076AE100EC8DA3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9F9C712E1E076AE100EC8DA3 /* Assets.xcassets */; };
-		9F9C71331E076AE100EC8DA3 /* StepicWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 9F9C71171E076AE000EC8DA3 /* StepicWatch.app */; };
-		9F9C71421E076B0000EC8DA3 /* CoursesInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9C713C1E076B0000EC8DA3 /* CoursesInterfaceController.swift */; };
-		9F9C71431E076B0000EC8DA3 /* CourseInfoInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9C713D1E076B0000EC8DA3 /* CourseInfoInterfaceController.swift */; };
-		9F9C71441E076B0000EC8DA3 /* PaybackInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9C713E1E076B0000EC8DA3 /* PaybackInterfaceController.swift */; };
-		9F9C71451E076B0000EC8DA3 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9C713F1E076B0000EC8DA3 /* ExtensionDelegate.swift */; };
-		9F9C71461E076B0000EC8DA3 /* CourseRowType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9C71401E076B0000EC8DA3 /* CourseRowType.swift */; };
-		9F9C71471E076B0000EC8DA3 /* DataRowType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9C71411E076B0000EC8DA3 /* DataRowType.swift */; };
 		9F9C71501E076B3E00EC8DA3 /* WatchSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9C71491E076B3E00EC8DA3 /* WatchSessionManager.swift */; };
-		9F9C71511E076B3E00EC8DA3 /* WatchSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9C71491E076B3E00EC8DA3 /* WatchSessionManager.swift */; };
 		9F9C71521E076B3E00EC8DA3 /* WatchSessionDataObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9C714A1E076B3E00EC8DA3 /* WatchSessionDataObserver.swift */; };
-		9F9C71531E076B3E00EC8DA3 /* WatchSessionDataObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9C714A1E076B3E00EC8DA3 /* WatchSessionDataObserver.swift */; };
 		9F9C71541E076B3E00EC8DA3 /* WatchSessionSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9C714B1E076B3E00EC8DA3 /* WatchSessionSender.swift */; };
-		9F9C71551E076B3E00EC8DA3 /* WatchSessionSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9C714B1E076B3E00EC8DA3 /* WatchSessionSender.swift */; };
 		9F9C71561E076B3E00EC8DA3 /* DataConvertable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9C714C1E076B3E00EC8DA3 /* DataConvertable.swift */; };
-		9F9C71571E076B3E00EC8DA3 /* DataConvertable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9C714C1E076B3E00EC8DA3 /* DataConvertable.swift */; };
 		9F9C71581E076B3E00EC8DA3 /* CoursePlainEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9C714D1E076B3E00EC8DA3 /* CoursePlainEntity.swift */; };
-		9F9C71591E076B3E00EC8DA3 /* CoursePlainEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9C714D1E076B3E00EC8DA3 /* CoursePlainEntity.swift */; };
 		9F9C715A1E076B3E00EC8DA3 /* PlaybackCommandEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9C714E1E076B3E00EC8DA3 /* PlaybackCommandEntity.swift */; };
-		9F9C715B1E076B3E00EC8DA3 /* PlaybackCommandEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9C714E1E076B3E00EC8DA3 /* PlaybackCommandEntity.swift */; };
 		9F9C715C1E076B3E00EC8DA3 /* PlaybackStatusEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9C714F1E076B3E00EC8DA3 /* PlaybackStatusEntity.swift */; };
-		9F9C715D1E076B3E00EC8DA3 /* PlaybackStatusEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9C714F1E076B3E00EC8DA3 /* PlaybackStatusEntity.swift */; };
 		CE0041AFAFDACBE34B231B16 /* Pods_Stepic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E978D25313465538A2470BA2 /* Pods_Stepic.framework */; };
 /* End PBXBuildFile section */
 
@@ -678,41 +655,15 @@
 			remoteGlobalIDString = 08DE94101B8C58AC00D278AB;
 			remoteInfo = Stepic;
 		};
-		9F9C71251E076AE100EC8DA3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08DE94091B8C58AC00D278AB /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9F9C71221E076AE000EC8DA3;
-			remoteInfo = "StepicWatch Extension";
-		};
-		9F9C71311E076AE100EC8DA3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08DE94091B8C58AC00D278AB /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9F9C71161E076AE000EC8DA3;
-			remoteInfo = StepicWatch;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		9F9C71391E076AE100EC8DA3 /* Embed App Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				9F9C71241E076AE100EC8DA3 /* StepicWatch Extension.appex in Embed App Extensions */,
-			);
-			name = "Embed App Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		9F9C713B1E076AE100EC8DA3 /* Embed Watch Content */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
 			dstSubfolderSpec = 16;
 			files = (
-				9F9C71331E076AE100EC8DA3 /* StepicWatch.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1081,11 +1032,9 @@
 		6A2D83A787103650B0C2E19F /* Pods_SberbankUniversity.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SberbankUniversity.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		828CF38D1E0866E40058ACFC /* clock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clock.png; sourceTree = "<group>"; };
 		9F5F3D701E08783E00000423 /* CourseMetainfoEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CourseMetainfoEntity.swift; sourceTree = "<group>"; };
-		9F9C71171E076AE000EC8DA3 /* StepicWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StepicWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F9C711A1E076AE000EC8DA3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		9F9C711C1E076AE000EC8DA3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9F9C711E1E076AE000EC8DA3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9F9C71231E076AE000EC8DA3 /* StepicWatch Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "StepicWatch Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F9C712C1E076AE100EC8DA3 /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
 		9F9C712E1E076AE100EC8DA3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9F9C71301E076AE100EC8DA3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1131,20 +1080,6 @@
 			files = (
 				08E16F251BDBA539004822E1 /* SystemConfiguration.framework in Frameworks */,
 				CE0041AFAFDACBE34B231B16 /* Pods_Stepic.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9F9C71201E076AE000EC8DA3 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F4823D557770D87F640127A2 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1860,8 +1795,6 @@
 				08DE94111B8C58AC00D278AB /* Stepic.app */,
 				08D121241C937B2200A54ABC /* SberbankUniversity.app */,
 				085D5CD91D007F2100092060 /* StepicTests.xctest */,
-				9F9C71171E076AE000EC8DA3 /* StepicWatch.app */,
-				9F9C71231E076AE000EC8DA3 /* StepicWatch Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2269,47 +2202,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				9F9C71321E076AE100EC8DA3 /* PBXTargetDependency */,
 			);
 			name = Stepic;
 			productName = Stepic;
 			productReference = 08DE94111B8C58AC00D278AB /* Stepic.app */;
 			productType = "com.apple.product-type.application";
-		};
-		9F9C71161E076AE000EC8DA3 /* StepicWatch */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 9F9C713A1E076AE100EC8DA3 /* Build configuration list for PBXNativeTarget "StepicWatch" */;
-			buildPhases = (
-				9F9C71151E076AE000EC8DA3 /* Resources */,
-				9F9C71391E076AE100EC8DA3 /* Embed App Extensions */,
-				F4823D557770D87F640127A2 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				9F9C71261E076AE100EC8DA3 /* PBXTargetDependency */,
-			);
-			name = StepicWatch;
-			productName = StepicWatch;
-			productReference = 9F9C71171E076AE000EC8DA3 /* StepicWatch.app */;
-			productType = "com.apple.product-type.application.watchapp2";
-		};
-		9F9C71221E076AE000EC8DA3 /* StepicWatch Extension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 9F9C71381E076AE100EC8DA3 /* Build configuration list for PBXNativeTarget "StepicWatch Extension" */;
-			buildPhases = (
-				9F9C711F1E076AE000EC8DA3 /* Sources */,
-				9F9C71201E076AE000EC8DA3 /* Frameworks */,
-				9F9C71211E076AE000EC8DA3 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "StepicWatch Extension";
-			productName = "StepicWatch Extension";
-			productReference = 9F9C71231E076AE000EC8DA3 /* StepicWatch Extension.appex */;
-			productType = "com.apple.product-type.watchkit2-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -2365,16 +2262,6 @@
 							};
 						};
 					};
-					9F9C71161E076AE000EC8DA3 = {
-						CreatedOnToolsVersion = 8.2;
-						DevelopmentTeam = 4562ZPB9BG;
-						ProvisioningStyle = Automatic;
-					};
-					9F9C71221E076AE000EC8DA3 = {
-						CreatedOnToolsVersion = 8.2;
-						DevelopmentTeam = 4562ZPB9BG;
-						ProvisioningStyle = Automatic;
-					};
 				};
 			};
 			buildConfigurationList = 08DE940C1B8C58AC00D278AB /* Build configuration list for PBXProject "Stepic" */;
@@ -2394,8 +2281,6 @@
 				08DE94101B8C58AC00D278AB /* Stepic */,
 				08D120731C937B2200A54ABC /* SberbankUniversity */,
 				085D5CD81D007F2100092060 /* StepicTests */,
-				9F9C71161E076AE000EC8DA3 /* StepicWatch */,
-				9F9C71221E076AE000EC8DA3 /* StepicWatch Extension */,
 			);
 		};
 /* End PBXProject section */
@@ -2514,25 +2399,6 @@
 				08EF9A0A1C91D0F800433E4A /* StepicVideoPlayerViewController.xib in Resources */,
 				0869F6D51CE229C800F8A6DB /* Queues.plist in Resources */,
 				08AC213C1CDD35DF00FBB9CD /* Users.plist in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9F9C71151E076AE000EC8DA3 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9F9C711D1E076AE000EC8DA3 /* Assets.xcassets in Resources */,
-				9F9C711B1E076AE000EC8DA3 /* Interface.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9F9C71211E076AE000EC8DA3 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				828CF38E1E0866E40058ACFC /* clock.png in Resources */,
-				08666B5A1E11C53D00799731 /* Localizable.strings in Resources */,
-				9F9C712F1E076AE100EC8DA3 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3262,29 +3128,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9F9C711F1E076AE000EC8DA3 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9F9C715B1E076B3E00EC8DA3 /* PlaybackCommandEntity.swift in Sources */,
-				9F9C715D1E076B3E00EC8DA3 /* PlaybackStatusEntity.swift in Sources */,
-				08666B611E11C57500799731 /* Localizables.swift in Sources */,
-				9F9C71531E076B3E00EC8DA3 /* WatchSessionDataObserver.swift in Sources */,
-				9F9C71451E076B0000EC8DA3 /* ExtensionDelegate.swift in Sources */,
-				9F9C71421E076B0000EC8DA3 /* CoursesInterfaceController.swift in Sources */,
-				9F9C71511E076B3E00EC8DA3 /* WatchSessionManager.swift in Sources */,
-				9F9C71431E076B0000EC8DA3 /* CourseInfoInterfaceController.swift in Sources */,
-				9F9C71571E076B3E00EC8DA3 /* DataConvertable.swift in Sources */,
-				9F5F3D721E087A6E00000423 /* CourseMetainfoEntity.swift in Sources */,
-				9F9C71471E076B0000EC8DA3 /* DataRowType.swift in Sources */,
-				9F9C71441E076B0000EC8DA3 /* PaybackInterfaceController.swift in Sources */,
-				9F9C71591E076B3E00EC8DA3 /* CoursePlainEntity.swift in Sources */,
-				9F9C71551E076B3E00EC8DA3 /* WatchSessionSender.swift in Sources */,
-				9F9C712D1E076AE100EC8DA3 /* ComplicationController.swift in Sources */,
-				9F9C71461E076B0000EC8DA3 /* CourseRowType.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -3292,16 +3135,6 @@
 			isa = PBXTargetDependency;
 			target = 08DE94101B8C58AC00D278AB /* Stepic */;
 			targetProxy = 085D5CDE1D007F2200092060 /* PBXContainerItemProxy */;
-		};
-		9F9C71261E076AE100EC8DA3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9F9C71221E076AE000EC8DA3 /* StepicWatch Extension */;
-			targetProxy = 9F9C71251E076AE100EC8DA3 /* PBXContainerItemProxy */;
-		};
-		9F9C71321E076AE100EC8DA3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9F9C71161E076AE000EC8DA3 /* StepicWatch */;
-			targetProxy = 9F9C71311E076AE100EC8DA3 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -3588,92 +3421,6 @@
 			};
 			name = Release;
 		};
-		9F9C71341E076AE100EC8DA3 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 4562ZPB9BG;
-				IBSC_MODULE = StepicWatch_Extension;
-				INFOPLIST_FILE = StepicWatch/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = com.AlexKarpov.Stepic.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 3.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 3.0;
-			};
-			name = Debug;
-		};
-		9F9C71351E076AE100EC8DA3 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 4562ZPB9BG;
-				IBSC_MODULE = StepicWatch_Extension;
-				INFOPLIST_FILE = StepicWatch/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = com.AlexKarpov.Stepic.watchkitapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 3.0;
-			};
-			name = Release;
-		};
-		9F9C71361E076AE100EC8DA3 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 4562ZPB9BG;
-				INFOPLIST_FILE = "StepicWatch Extension/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.AlexKarpov.Stepic.watchkitapp.watchkitextension;
-				PRODUCT_NAME = "${TARGET_NAME}";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 3.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 3.0;
-			};
-			name = Debug;
-		};
-		9F9C71371E076AE100EC8DA3 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				DEVELOPMENT_TEAM = 4562ZPB9BG;
-				INFOPLIST_FILE = "StepicWatch Extension/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.AlexKarpov.Stepic.watchkitapp.watchkitextension;
-				PRODUCT_NAME = "${TARGET_NAME}";
-				SDKROOT = watchos;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
-				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 3.0;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -3709,24 +3456,6 @@
 			buildConfigurations = (
 				08DE94311B8C58AC00D278AB /* Debug */,
 				08DE94321B8C58AC00D278AB /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		9F9C71381E076AE100EC8DA3 /* Build configuration list for PBXNativeTarget "StepicWatch Extension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				9F9C71361E076AE100EC8DA3 /* Debug */,
-				9F9C71371E076AE100EC8DA3 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		9F9C713A1E076AE100EC8DA3 /* Build configuration list for PBXNativeTarget "StepicWatch" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				9F9C71341E076AE100EC8DA3 /* Debug */,
-				9F9C71351E076AE100EC8DA3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
