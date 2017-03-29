@@ -22,6 +22,7 @@ extension Course {
     @NSManaged var managedImageURL: String?
     @NSManaged var managedEnrolled: NSNumber?
     @NSManaged var managedFeatured: NSNumber?
+    @NSManaged var managedPublic: NSNumber?
     
     @NSManaged var managedSummary: String?
     @NSManaged var managedWorkload: String?
@@ -32,6 +33,7 @@ extension Course {
     @NSManaged var managedRequirements: String?
     @NSManaged var managedSlug: String?
     @NSManaged var managedProgressId: String?
+    @NSManaged var managedLastStepId: String?
     
     @NSManaged var managedInstructors : NSOrderedSet?
     @NSManaged var managedSections : NSOrderedSet?
@@ -42,6 +44,7 @@ extension Course {
     @NSManaged var managedIntroVideo : Video?
     
     @NSManaged var managedProgress: Progress?
+    @NSManaged var managedLastStep: LastStep?
     
     class var oldEntity : NSEntityDescription {
         return NSEntityDescription.entity(forEntityName: "Course", in: CoreDataHelper.instance.context)!
@@ -123,6 +126,15 @@ extension Course {
         }
     }
     
+    var lastStepId: String? {
+        set(id){
+            self.managedLastStepId = id
+        }
+        get{
+            return managedLastStepId
+        }
+    }
+    
     var enrolled : Bool {
         set(enrolled) {
             self.managedEnrolled = enrolled as NSNumber?
@@ -138,6 +150,15 @@ extension Course {
         }
         get {
             return managedFeatured?.boolValue ?? false
+        }
+    }
+    
+    var isPublic : Bool {
+        set(isPublic){
+            self.managedPublic = isPublic as NSNumber?
+        }
+        get {
+            return managedPublic?.boolValue ?? false
         }
     }
     
@@ -212,6 +233,15 @@ extension Course {
         }
         set(value) {
             managedProgress = value
+        }
+    }
+    
+    var lastStep : LastStep? {
+        get {
+            return managedLastStep
+        }
+        set(value) {
+            managedLastStep = value
         }
     }
     

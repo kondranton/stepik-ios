@@ -68,7 +68,7 @@ class WebStepViewController: UIViewController {
         stepWebView.scrollView.backgroundColor = UIColor.white
 //        stepWebView.backgroundColor = UIColor.white
         
-        scrollHelper = WebViewHorizontalScrollHelper(webView: stepWebView, onView: self.view, pagerPanRecognizer: stepsVC.pagerScrollView.panGestureRecognizer)
+        scrollHelper = WebViewHorizontalScrollHelper(webView: stepWebView, onView: self.view, pagerPanRecognizer: stepsVC.pagerScrollView!.panGestureRecognizer)
         print(self.view.gestureRecognizers)
         
         nextLessonButton.setTitle("  \(NSLocalizedString("NextLesson", comment: ""))  ", for: UIControlState())
@@ -204,8 +204,14 @@ class WebStepViewController: UIViewController {
             let quizController = MatchingQuizViewController(nibName: "QuizViewController", bundle: nil)
             initQuizController(quizController)
             break
+        case "fill-blanks":
+            let quizController = FillBlanksQuizViewController(nibName: "QuizViewController", bundle: nil)
+            initQuizController(quizController)
+            break
+ 
         default:
             let quizController = UnknownTypeQuizViewController(nibName: "UnknownTypeQuizViewController", bundle: nil)
+            print("unknown type \(step.block.name)")
             quizController.stepUrl = self.stepUrl
             quizController.delegate = self
             self.addChildViewController(quizController)
@@ -220,19 +226,29 @@ class WebStepViewController: UIViewController {
 //        self.view.setNeedsLayout()
 //        self.view.layoutIfNeeded()
         
+        AnalyticsReporter.reportEvent(AnalyticsEvents.Step.opened, parameters: ["item_name": step.block.name as NSObject])
+        
+        if step.hasSubmissionRestrictions {
+            AnalyticsReporter.reportEvent(AnalyticsEvents.Step.hasRestrictions, parameters: nil)
+        }
+        
         NotificationCenter.default.addObserver(self, selector: #selector(WebStepViewController.updatedStepNotification(_:)), name: NSNotification.Name(rawValue: StepsViewController.stepUpdatedNotification), object: nil)
 
         let stepid = step.id
         print("view did appear for web step with id \(stepid)")
-
+        
+        LastStepGlobalContext.context.stepId = stepid
+        
         if stepId - 1 == startStepId {
             startStepBlock()
         }
         
         if shouldSendViewsBlock() {
+            //Send view to views
             performRequest({
                 [weak self] in
-                ApiDataDownloader.sharedDownloader.didVisitStepWith(id: stepid, assignment: self?.assignment?.id, success: {
+                print("Sending view for step with id \(stepid) & assignment \(self?.assignment?.id)")
+                _ = ApiDataDownloader.sharedDownloader.didVisitStepWith(id: stepid, assignment: self?.assignment?.id, success: {
                     [weak self] in
                     if let cstep = self?.step {
                         if cstep.block.name == "text" {
@@ -246,6 +262,17 @@ class WebStepViewController: UIViewController {
                     }
                 })
             })
+            //Update LastStep locally from the context
+            if let course = LastStepGlobalContext.context.course, 
+                let unitId = LastStepGlobalContext.context.unitId, 
+                let stepId = LastStepGlobalContext.context.stepId {
+                
+                if let lastStep = course.lastStep {
+                    lastStep.update(unitId: unitId, stepId: stepId)
+                } else {
+                    course.lastStep = LastStep(id: course.lastStepId ?? "", unitId: unitId, stepId: stepId)
+                }
+            } 
         }
     }
     

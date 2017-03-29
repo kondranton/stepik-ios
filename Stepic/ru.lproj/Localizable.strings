@@ -144,7 +144,6 @@ SignOut = "Выйти";
 Profile = "Профиль";
 Preferences = "Настройки";
 CurrentStreak = "Решаю без перерыва";
-LongestStreak = "Личный рекорд";
 Activity = "Активность";
 days1 = "день";
 days234 = "дня";
@@ -168,3 +167,25 @@ StreakNotificationsAlertMessage = "Похоже, вы запретили при�
 PassedPercent = "Пройдено";
 AuthorDidntUploadVideo = "Автор еще не загрузил видео.";
 NoVideo = "Нет видео";
+FillBlankOptionTitle = "Выберите вариант";
+FillBlankInputTextFieldPlaceholder = "Введите ответ";
+FillBlanksSelectAnswerString = "Выберите ответ";
+FillBlanksSelectButtonString = "Выбрать";
+DeletedComment = "Комментарий удален";
+Section = "Модуль";
+Lesson = "Урок";
+ContinueLearning = "Учиться";
+DropCourse =  "Покинуть курс";
+Continue = "Продолжить";
+Refreshing = "Обновляем...";
+RefreshingDescription = "";
+EmptyTitle = "Пусто :(";
+CurrentStreakTitle = "Решаю задачи";
+InARow = "подряд";
+LongestStreak = "Личный рекорд";
+CurrentBestStreakAlertTopText = "Личный рекорд - отличная мотивация для того, чтобы учиться";
+CurrentBestStreakAlertBottomText = "Решайте задачи каждый день и улучшайте свои показатели!";
+ReceiveNotifications = "Получать напоминания";
+
+
+

@@ -17,17 +17,26 @@ class ApiDataDownloader: NSObject {
     fileprivate override init() {}
     
     
-    func getDisplayedCoursesIds(featured: Bool?, enrolled: Bool?, page: Int?, success : @escaping ([Int], Meta) -> Void, failure : @escaping (_ error : Error) -> Void) -> Request? {
+    func getDisplayedCoursesIds(featured: Bool?, enrolled: Bool?, isPublic: Bool?, order: String?, page: Int?, success : @escaping ([Int], Meta) -> Void, failure : @escaping (_ error : Error) -> Void) -> Request? {
         let headers : HTTPHeaders = AuthInfo.shared.initialHTTPHeaders
         // = ["Authorization" : "\(AuthInfo.shared.token!.tokenType) \(AuthInfo.shared.token!.accessToken)"]
         
         var params = Parameters()
+        
         if let f = featured {
             params["is_featured"] = f ? "true" : "false"
         } 
         
         if let e = enrolled {
             params["enrolled"] = e ? "true" : "false"
+        }
+        
+        if let p = isPublic {
+            params["is_public"] = p ? "true" : "false"
+        }
+        
+        if let o = order {
+            params["order"] = o
         }
         
         if let p = page {
@@ -116,7 +125,7 @@ class ApiDataDownloader: NSObject {
         })
     }
     
-    fileprivate func constructIdsString<TID>(array arr: [TID]) -> String {
+    func constructIdsString<TID>(array arr: [TID]) -> String {
         var result = ""
         for element in arr {
             result += "ids[]=\(element)&"
@@ -217,7 +226,7 @@ class ApiDataDownloader: NSObject {
             case .update:
                 
                 for objectJSON in json[requestString].arrayValue {
-                    let existing = deleteObjects.filter({obj in obj.id == objectJSON["id"].intValue})
+                    let existing = deleteObjects.filter({obj in obj.hasEqualId(json: objectJSON)})
                     
                     switch existing.count {
                     case 0: 
@@ -238,6 +247,11 @@ class ApiDataDownloader: NSObject {
     }
     
     func getProgressesByIds(_ ids: [String], deleteProgresses : [Progress], refreshMode: RefreshMode, success : (([Progress]) -> Void)?, failure : @escaping (_ error : Error) -> Void) -> Request? {
+        
+        let manager = Alamofire.SessionManager.default
+        manager.session.configuration.timeoutIntervalForRequest = 120
+
+        
         let requestString = "progresses"
         let headers : [String : String] = AuthInfo.shared.initialHTTPHeaders
         var params : Parameters = [:]
@@ -255,8 +269,7 @@ class ApiDataDownloader: NSObject {
             return nil
         }
         
-//        return Alamofire.request("\(StepicApplicationsInfo.apiURL)/\(requestString)?\(idString)", parameters: params, headers: headers, encoding: URLEncoding.default).responseSwiftyJSON({
-        return Alamofire.request("\(StepicApplicationsInfo.apiURL)/\(requestString)?\(idString)", parameters: params, encoding: URLEncoding.default, headers: headers).responseSwiftyJSON({
+        return manager.request("\(StepicApplicationsInfo.apiURL)/\(requestString)?\(idString)", parameters: params, encoding: URLEncoding.default, headers: headers).responseSwiftyJSON({
             response in
             
             var error = response.result.error
@@ -271,9 +284,10 @@ class ApiDataDownloader: NSObject {
             let response = response.response
             
             
-//            print(json)
+            print(json)
             
             if let e = error {
+                print(e)
                 failure(e)
                 return
             }
@@ -362,7 +376,7 @@ class ApiDataDownloader: NSObject {
         })
     }
     
-    func search(query: String, type: String?, page: Int?, success: @escaping ([SearchResult], Meta) -> Void, error errorHandler: @escaping (String)->Void) -> Request? {
+    func search(query: String, type: String?, page: Int?, success: @escaping ([SearchResult], Meta) -> Void, error errorHandler: @escaping (NSError)->Void) -> Request? {
         let headers : [String : String] = AuthInfo.shared.initialHTTPHeaders
         var params : Parameters = [:]
         
@@ -391,10 +405,8 @@ class ApiDataDownloader: NSObject {
             let response = response.response
             
             
-            if let e = error {
-                let d = (e as NSError).localizedDescription
-                print(d)
-                errorHandler(d)
+            if let e = error as? NSError {
+                errorHandler(e)
                 return
             }
             
@@ -682,6 +694,7 @@ class ApiDataDownloader: NSObject {
     static let stepics = StepicsAPI()
     static let units = UnitsAPI()
     static let userActivities = UserActivitiesAPI()
+    static let lastSteps = LastStepsAPI()
 }
 
 enum RefreshMode {

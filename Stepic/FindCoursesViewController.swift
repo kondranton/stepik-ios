@@ -29,6 +29,10 @@ class FindCoursesViewController: CoursesViewController {
         self.searchController.searchBar.resignFirstResponder()
     }
     
+    override func refreshBegan() {
+        emptyDatasetState = .refreshing
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         let constraintDistance = tableView.convert(tableView.bounds, to: nil).minY
@@ -46,7 +50,9 @@ class FindCoursesViewController: CoursesViewController {
     override func viewDidLoad() {
         
         loadEnrolled = nil
-        loadFeatured = true
+        loadFeatured = nil
+        loadPublic = true
+        loadOrder = "-activity"
         
         searchResultsVC = ControllerHelper.instantiateViewController(identifier: "SearchResultsCoursesViewController") as! SearchResultsCoursesViewController
         searchResultsVC.parentVC = self
@@ -58,7 +64,7 @@ class FindCoursesViewController: CoursesViewController {
         searchController.delegate = self
         self.searchController.hidesNavigationBarDuringPresentation = false
         searchController.searchBar.showsCancelButton = false
-        searchController.searchBar.barTintColor = UIColor.stepicGreenColor()
+        searchController.searchBar.barTintColor = UIColor.navigationColor
         searchController.searchBar.tintColor = UIColor.white
         UITextField.appearanceWhenContained(within: [UISearchBar.self]).tintColor = UIColor.defaultDwonloadButtonBlue()
 
@@ -106,6 +112,9 @@ extension FindCoursesViewController {
             return Images.emptyCoursesPlaceholder
         case .connectionError:
             return Images.noWifiImage.size250x250
+        case .refreshing:
+            return Images.emptyCoursesPlaceholder
+
         }
     }
     
@@ -117,6 +126,9 @@ extension FindCoursesViewController {
             break
         case .connectionError:
             text = NSLocalizedString("ConnectionErrorTitle", comment: "")
+            break
+        case .refreshing:
+            text = NSLocalizedString("Refreshing", comment: "")
             break
         }
         
@@ -136,6 +148,10 @@ extension FindCoursesViewController {
         case .connectionError:
             text = NSLocalizedString("ConnectionErrorPullToRefresh", comment: "")
             break
+        case .refreshing:
+            text = NSLocalizedString("RefreshingDescription", comment: "")
+            break
+
         }
         
         let paragraph = NSMutableParagraphStyle()

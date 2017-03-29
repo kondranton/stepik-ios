@@ -1,0 +1,161 @@
+# Customise this file, documentation can be found here:
+# https://github.com/fastlane/fastlane/tree/master/fastlane/docs
+# All available actions: https://docs.fastlane.tools/actions
+# can also be listed using the `fastlane actions` command
+
+# Change the syntax highlighting to Ruby
+# All lines starting with a # are ignored when running `fastlane`
+
+# If you want to automatically update fastlane if a new version is available:
+# update_fastlane
+
+# This is the minimum version number required.
+# Update this, if you use features of a newer version
+fastlane_version "2.23.0"
+
+default_platform :ios
+
+platform :ios do
+
+  before_all do
+    ENV["SLACK_URL"] = "https://hooks.slack.com/services/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"
+    cocoapods
+  end
+
+  desc "Runs all the tests"
+  lane :test do
+    scan
+  end
+
+  def version_string(version_number, build_number)
+    "v. #{version_number} (#{build_number})"
+  end
+
+
+  desc "Submit a new Beta Build to Crashlytics"
+  desc "This will also make sure the profile is up to date"
+  lane :beta do
+
+  	matchadhoc
+
+  	# Ensure that your git status is not dirty
+  	ensure_git_status_clean
+
+
+  	# Increment the build number (not the version number)
+  	# Providing the xcodeproj is optional
+  	build_number = increment_build_number(xcodeproj: "Stepic.xcodeproj")
+  	version_number = get_version_number
+  	# Commit the version bump
+  	commit_version_bump(xcodeproj: "Stepic.xcodeproj")
+
+  	# Add a git tag for this build. This will automatically
+  	# use an appropriate git tag name
+  	add_git_tag
+
+  	# Push the new commit and tag back to your git remote
+ 	push_to_git_remote
+    # match(type: "appstore") # more information: https://codesigning.guide
+    gym(scheme: "Stepic") # Build your app - more options available
+    crashlytics(api_token: "d4016589326f6f7814080b7ff9017e18711a1959",
+              build_secret: "7b8ab6e85a0ca84908f6cd82f195f1b24ffad778e69b5bce1105ce078d1255f8",
+              notifications: true)
+    slack(
+      message: "Successfully released iOS beta #{version_string(version_number, build_number)}", 
+      channel: "#ios-ci"
+    )
+    # sh "your_script.sh"
+    # You can also use other beta testing services here (run `fastlane actions`)
+  end
+
+  desc "Match all certificates"
+  lane :matchall do 
+  	matchdev
+  	matchadhoc
+  	matchrelease
+  end
+
+  lane :matchdev do
+  	match(type: "development", force_for_new_devices: true, 
+  		app_identifier: ["com.AlexKarpov.Stepic", 
+  		"com.AlexKarpov.Stepic.watchkitapp", 
+  		"com.AlexKarpov.Stepic.watchkitapp.watchkitextension"])
+  end
+
+  lane :matchadhoc do
+  	match(type: "adhoc", force_for_new_devices: true, 
+  		app_identifier: ["com.AlexKarpov.Stepic", 
+  		"com.AlexKarpov.Stepic.watchkitapp", 
+  		"com.AlexKarpov.Stepic.watchkitapp.watchkitextension"])  
+  end
+
+  lane :matchrelease do
+  	match(type: "appstore", force_for_new_devices: true, 
+  		app_identifier: ["com.AlexKarpov.Stepic", 
+  		"com.AlexKarpov.Stepic.watchkitapp", 
+  		"com.AlexKarpov.Stepic.watchkitapp.watchkitextension"])
+  end
+
+  desc "Deploy a new version to the App Store"
+  lane :release do
+    # match(type: "appstore")
+    # snapshot
+    matchrelease
+    gym(scheme: "Stepic")         # build your app
+    deliver     
+    slack(
+      message: "Successfully released iOS beta #{version_string(get_version_number, get_build_number)}", 
+      channel: "#ios-ci"
+    )                  
+    # upload your app to iTunes Connect
+    # frameit
+  end
+
+  lane :sb do 
+  	import_certificate(
+  	  certificate_path: "cert/cert.p12",
+  	  certificate_password: "123123"
+	)
+	import_certificate(
+  	  certificate_path: "cert/stepic_push.p12",
+  	  certificate_password: "123123"
+	)
+	update_project_provisioning(
+  	  xcodeproj: "Stepic.xcodeproj",
+      profile: "cert/Step.mobileprovision", # optional if you use sigh
+      target_filter: "SberbankUniversity", # matches name or type of a target
+      build_configuration: "Release"
+    )
+  	gym(
+  	  scheme: "SberbankUniversity",
+  	  output_directory: "artefacts",
+  	  output_name: "SberbankUniversity.ipa",
+  	  include_bitcode: true,
+  	  export_method: "enterprise"
+  	) # Build your app - more options available
+  end
+
+  # You can define as many lanes as you want
+
+  after_all do |lane|
+    # This block is called, only if the executed lane was successful
+
+    # slack(
+    #   message: "Successfully deployed new App Update for iOS."
+    # )
+  end
+
+  error do |lane, exception|
+    slack(
+      message: exception.message,
+      success: false
+    )
+  end
+end
+
+
+# More information about multiple platforms in fastlane: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Platforms.md
+# All available actions: https://docs.fastlane.tools/actions
+
+# fastlane reports which actions are used
+# No personal data is recorded. Learn more at https://github.com/fastlane/enhancer

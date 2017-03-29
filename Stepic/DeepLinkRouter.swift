@@ -89,7 +89,7 @@ class DeepLinkRouter {
                 let courses = try Course.getCourses([courseId])
                 if courses.count == 0 {
                     performRequest({
-                        ApiDataDownloader.sharedDownloader.getCoursesByIds([courseId], deleteCourses: [], refreshMode: .delete, success: {
+                        _ = ApiDataDownloader.sharedDownloader.getCoursesByIds([courseId], deleteCourses: [], refreshMode: .delete, success: {
                             loadedCourses in 
                             if loadedCourses.count == 1 {
                                 UIThread.performUI {
@@ -110,7 +110,7 @@ class DeepLinkRouter {
                     })
                     return
                 } 
-                if courses.count == 1 {
+                if courses.count >= 1 {
                     vc.course = courses[0]
                     completion(vc, true)
                     return
@@ -133,7 +133,7 @@ class DeepLinkRouter {
             let courses = try Course.getCourses([courseId])
             if courses.count == 0 {
                 performRequest({
-                    ApiDataDownloader.sharedDownloader.getCoursesByIds([courseId], deleteCourses: [], refreshMode: .delete, success: {
+                    _ = ApiDataDownloader.sharedDownloader.getCoursesByIds([courseId], deleteCourses: [], refreshMode: .delete, success: {
                         loadedCourses in 
                         if loadedCourses.count == 1 {
                             UIThread.performUI {
@@ -165,7 +165,7 @@ class DeepLinkRouter {
                 })
                 return
             } 
-            if courses.count == 1 {
+            if courses.count >= 1 {
                 let course = courses[0]
                 if course.enrolled {
                     if let vc = ControllerHelper.instantiateViewController(identifier: "SectionsViewController") as?  SectionsViewController {

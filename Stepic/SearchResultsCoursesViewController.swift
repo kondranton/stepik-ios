@@ -9,6 +9,7 @@
 import UIKit
 import DZNEmptyDataSet
 import FLKAutoLayout
+import Alamofire
 
 class SearchResultsCoursesViewController: CoursesViewController {
     
@@ -18,6 +19,7 @@ class SearchResultsCoursesViewController: CoursesViewController {
         didSet {
             if self.query != oldValue {
                 self.isLoadingMore = false
+                self.currentRequest?.cancel()
                 refreshCourses()
             }
         }
@@ -102,39 +104,60 @@ class SearchResultsCoursesViewController: CoursesViewController {
         //        print("\n didLayoutSubviews searchResults: tableViewDistance -> \(constraintDistance), offset -> \(tableView.contentOffset), inset -> \(tableView.contentInset), frame -> \(tableView.frame)\n")
     }
     
+    var currentRequest : Request?
+    
+    let cancelErrorCode : Int = -999
+    
     override func refreshCourses() {
         isRefreshing = true
         performRequest({ 
+            [weak self]
             () -> Void in
-            ApiDataDownloader.sharedDownloader.search(query: self.query, type: "course", page: 1, success: { 
-                (searchResults, meta) -> Void in
-                let ids = searchResults.flatMap({return $0.courseId})
-                
-                ApiDataDownloader.sharedDownloader.getCoursesByIds(ids, deleteCourses: Course.getAllCourses(), refreshMode: .update, success: { 
-                    (newCourses) -> Void in
+            if let s = self {
+                s.currentRequest = ApiDataDownloader.sharedDownloader.search(query: s.query, type: "course", page: 1, success: { 
+                    (searchResults, meta) -> Void in
+                    let ids = searchResults.flatMap({return $0.courseId})
                     
-                    self.courses = Sorter.sort(newCourses, byIds: ids)
-                    self.meta = meta
-                    self.currentPage = 1
-                    DispatchQueue.main.async {
-                        self.refreshControl?.endRefreshing()
-                        self.tableView.reloadData()
-                    }
-                    self.isRefreshing = false
-                    }, failure: { 
+                    s.currentRequest = ApiDataDownloader.sharedDownloader.getCoursesByIds(ids, deleteCourses: Course.getAllCourses(), refreshMode: .update, success: { 
+                        (newCourses) -> Void in
+                        
+                        s.courses = Sorter.sort(newCourses, byIds: ids)
+                        s.meta = meta
+                        s.currentPage = 1
+                        DispatchQueue.main.async {
+                            s.refreshControl?.endRefreshing()
+                            s.tableView.reloadData()
+                        }
+                        s.isRefreshing = false
+                        }, failure: { 
+                            (error) -> Void in
+                            print("failed downloading courses data in refresh")
+                            let e = error as NSError 
+                            if e.code != s.cancelErrorCode {
+                                s.handleRefreshError()
+                            }
+                    })
+                    
+                    }, error: { 
                         (error) -> Void in
-                        print("failed downloading courses data in refresh")
-                        self.handleRefreshError()
+                        print("failed refreshing course ids in refresh")
+                        if error.code != s.cancelErrorCode {
+                            s.handleRefreshError()
+                        }
                 })
-                
-                }, error: { 
-                    (error) -> Void in
-                    print("failed refreshing course ids in refresh")
-                    self.handleRefreshError()
-                    
-            })
+            }
             }, error:  {
-                self.handleRefreshError()
+                [weak self] 
+                error in
+                guard let s = self else { return }
+                if error == PerformRequestError.noAccessToRefreshToken {
+                    AuthInfo.shared.token = nil
+                    RoutingManager.auth.routeFrom(controller: s, success: {
+                        [weak self] in 
+                        self?.refreshCourses()
+                        }, cancel: nil)
+                }
+                self?.handleRefreshError()
         })
     }
     
@@ -147,10 +170,10 @@ class SearchResultsCoursesViewController: CoursesViewController {
         //TODO : Check if it should be executed in another thread
         performRequest({ 
             () -> Void in
-            ApiDataDownloader.sharedDownloader.search(query: self.query, type: "course", page: self.currentPage + 1, success: { 
+            _ = ApiDataDownloader.sharedDownloader.search(query: self.query, type: "course", page: self.currentPage + 1, success: { 
                 (searchResults, meta) -> Void in
                 let ids = searchResults.flatMap({return $0.courseId})
-                ApiDataDownloader.sharedDownloader.getCoursesByIds(ids, deleteCourses: Course.getAllCourses(), refreshMode: .update, success: { 
+                _ = ApiDataDownloader.sharedDownloader.getCoursesByIds(ids, deleteCourses: Course.getAllCourses(), refreshMode: .update, success: { 
                     (newCourses) -> Void in
                     
                     if !self.isLoadingMore {
@@ -178,8 +201,18 @@ class SearchResultsCoursesViewController: CoursesViewController {
                     self.handleLoadMoreError()
                     
             })
-            }, error:  {
-                self.handleLoadMoreError()
+        }, error:  {
+            [weak self] 
+            error in
+            guard let s = self else { return }
+            if error == PerformRequestError.noAccessToRefreshToken {
+                AuthInfo.shared.token = nil
+                RoutingManager.auth.routeFrom(controller: s, success: {
+                    [weak self] in 
+                    self?.refreshCourses()
+                    }, cancel: nil)
+            }
+            self?.handleRefreshError()
         })
     }
     

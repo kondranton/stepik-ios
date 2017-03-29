@@ -42,10 +42,14 @@ class VideoStepViewController: UIViewController {
     @IBOutlet weak var nextLessonButton: UIButton!
     @IBOutlet weak var nextLessonButtonHeight: NSLayoutConstraint!
     @IBOutlet weak var prevLessonButtonHeight: NSLayoutConstraint!
-    @IBOutlet weak var discussionToPrevDistance: NSLayoutConstraint!
-    @IBOutlet weak var discussionToNextDistance: NSLayoutConstraint!
-    @IBOutlet weak var prevToBottomDistance: NSLayoutConstraint!
-    @IBOutlet weak var nextToBottomDistance: NSLayoutConstraint!
+    
+    @IBOutlet weak var prevNextLessonButtonsContainerViewHeight: NSLayoutConstraint!
+    
+    
+//    @IBOutlet weak var discussionToPrevDistance: NSLayoutConstraint!
+//    @IBOutlet weak var discussionToNextDistance: NSLayoutConstraint!
+//    @IBOutlet weak var prevToBottomDistance: NSLayoutConstraint!
+//    @IBOutlet weak var nextToBottomDistance: NSLayoutConstraint!
     
     var imageTapHelper : ImageTapHelper!
     
@@ -109,10 +113,11 @@ class VideoStepViewController: UIViewController {
         if nextLessonHandler == nil && prevLessonHandler == nil {
             nextLessonButtonHeight.constant = 0
             prevLessonButtonHeight.constant = 0
-            discussionToNextDistance.constant = 0
-            discussionToPrevDistance.constant = 0
-            prevToBottomDistance.constant = 0
-            nextToBottomDistance.constant = 0
+            prevNextLessonButtonsContainerViewHeight.constant = 0
+//            discussionToNextDistance.constant = 0
+//            discussionToPrevDistance.constant = 0
+//            prevToBottomDistance.constant = 0
+//            nextToBottomDistance.constant = 0
         }
     }
     
@@ -170,6 +175,9 @@ class VideoStepViewController: UIViewController {
         guard let cstep = step else {
             return
         }
+        
+        AnalyticsReporter.reportEvent(AnalyticsEvents.Step.opened, parameters: ["item_name": step.block.name as NSObject])
+
         let stepid = step.id         
         if stepId - 1 == startStepId {
             startStepBlock()
@@ -177,14 +185,15 @@ class VideoStepViewController: UIViewController {
         if shouldSendViewsBlock() {
             performRequest({
                 [weak self] in
-                ApiDataDownloader.sharedDownloader.didVisitStepWith(id: stepid, assignment: self?.assignment?.id, success: {
+                print("Sending view for step with id \(stepid) & assignment \(self?.assignment?.id)")
+                _ = ApiDataDownloader.sharedDownloader.didVisitStepWith(id: stepid, assignment: self?.assignment?.id, success: {
                     NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: StepDoneNotificationKey), object: nil, userInfo: ["id" : cstep.id])
                     UIThread.performUI{
                         cstep.progress?.isPassed = true
                         CoreDataHelper.instance.save()
                     }
                 }) 
-                })
+            })
         }
     }
     

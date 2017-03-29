@@ -18,11 +18,8 @@ class ProfileViewController: UITableViewController {
     @IBOutlet weak var userNameLabel: UILabel!
     
     @IBOutlet weak var signOutButton: UIButton!
-    
-    @IBOutlet weak var currentStreakLabel: UILabel!
-    @IBOutlet weak var longestStreakLabel: UILabel!
-    @IBOutlet weak var streaksActivityIndicator: UIActivityIndicatorView!
-    
+        
+    @IBOutlet weak var streaksView: StreaksView!
     
     var heightForRows = [[131], [75], [40]]
     let selectionForRows = [[false], [false], [true]]
@@ -35,8 +32,6 @@ class ProfileViewController: UITableViewController {
     fileprivate func localize() {
         signInButton.setTitle(NSLocalizedString("SignIn", comment: ""), for: UIControlState())
         signOutButton.setTitle(NSLocalizedString("SignOut", comment: ""), for: UIControlState())
-        currentStreakLabel.text = NSLocalizedString("CurrentStreak", comment: "")
-        longestStreakLabel.text = NSLocalizedString("LongestStreak", comment: "")
     }
 
     override func viewDidLoad() {
@@ -45,17 +40,14 @@ class ProfileViewController: UITableViewController {
         tableView.contentInset = UIEdgeInsetsMake(30, 0, 0, 0)
         
         localize() 
-        setStreaks(visible: false)
         signInButton.setStepicWhiteStyle()
         avatarImageView.setRoundedBounds(width: 0)
         signInButton.isHidden = false
         // Do any additional setup after loading the view.
     }
     
-    func setStreaks(visible: Bool) {
-        currentStreakLabel.isHidden = !visible
-        longestStreakLabel.isHidden = !visible
-        streaksActivityIndicator.isHidden = visible
+    func setStreaks(activity: UserActivity) {
+        streaksView.setStreaks(current: activity.currentStreak, best: activity.longestStreak)
     }
     
     func updateUser() {
@@ -66,25 +58,44 @@ class ProfileViewController: UITableViewController {
                 if let user = AuthInfo.shared.user {
                     self.initWithUser(user)
                 }
+            }, error: {
+                [weak self] 
+                error in
+                guard let s = self else { return }
+                if error == PerformRequestError.noAccessToRefreshToken {
+                    AuthInfo.shared.token = nil
+                    RoutingManager.auth.routeFrom(controller: s, success: {
+                        [weak self] in 
+                        self?.updateUser()
+                    }, cancel: {
+                        [weak self] in
+                        self?.updateUser()
+                    })
+                }
             })
         }
     }
     
     fileprivate func initWithUser(_ user : User) {
         print("\(user.avatarURL)")
-        avatarImageView.sd_setImage(with: URL(string: user.avatarURL), placeholderImage: Constants.placeholderImage, options: [])
+        
+        avatarImageView.setImageWithURL(url: URL(string: user.avatarURL), placeholder: Constants.placeholderImage)
+//        avatarImageView.sd_setImage(with: URL(string: user.avatarURL), placeholderImage: Constants.placeholderImage, options: [])
+        
         userNameLabel.text = "\(user.firstName) \(user.lastName)"
         if !AuthInfo.shared.isAuthorized {
             signInHeight.constant = 40
             signInNameDistance.constant = 8
             heightForRows[0][0] = 131 + 48
             heightForRows[2][0] = 0
+            heightForRows[1][0] = 0
             signInButton.isHidden = false
         } else {
             signInHeight.constant = 0
             signInNameDistance.constant = 0
             heightForRows[0][0] = 131
-            heightForRows[2][0] = 40
+            heightForRows[2][0] = 40        
+//            heightForRows[1][0] = 0
             signInButton.isHidden = true
         }
         
@@ -92,9 +103,10 @@ class ProfileViewController: UITableViewController {
             [weak self] 
             activity in
             if let s = self {
-                s.currentStreakLabel.text = "\(NSLocalizedString("CurrentStreak", comment: "")) \(activity.currentStreak) \(s.dayLocalizableFor(daysCnt: activity.currentStreak))"
-                s.longestStreakLabel.text = "\(NSLocalizedString("LongestStreak", comment: "")) \(activity.longestStreak) \(s.dayLocalizableFor(daysCnt: activity.longestStreak))"
-                s.setStreaks(visible: true)
+                s.setStreaks(activity: activity)
+                s.heightForRows[1][0] = 108
+                s.tableView.beginUpdates()
+                s.tableView.endUpdates()
             }
         }, error: {
             error in
@@ -136,7 +148,7 @@ class ProfileViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if (section == 1 && heightForRows[2][0] == 0) {
+        if (section == 2 && heightForRows[2][0] == 0) || (section == 1 && heightForRows[1][0] == 0) {
             return nil 
         } else {
             return sectionTitles[section]
@@ -146,24 +158,18 @@ class ProfileViewController: UITableViewController {
     func signOut() {
         AnalyticsReporter.reportEvent(AnalyticsEvents.Logout.clicked, parameters: nil)
         AuthInfo.shared.token = nil
-        if let vc = ControllerHelper.getAuthController() as? AuthNavigationViewController {
-            vc.success = {
-                [weak self] in
-                self?.updateUser()
-            }
-            vc.cancel = vc.success
-            self.present(vc, animated: true, completion: nil)
+        let updateBlock : ((Void)->Void) = {
+            [weak self] in
+            self?.updateUser()
         }
+        RoutingManager.auth.routeFrom(controller: self, success: updateBlock, cancel: updateBlock)
     }
     
     func signIn() {
-        if let vc = ControllerHelper.getAuthController() as? AuthNavigationViewController {
-            vc.success = {
-                [weak self] in
-                self?.updateUser()
-            }
-            self.present(vc, animated: true, completion: nil)
-        }
+        RoutingManager.auth.routeFrom(controller: self, success: {
+            [weak self] in
+            self?.updateUser()
+        }, cancel: nil)
     }
     
     @IBAction func signInButtonPressed(_ sender: AnyObject) {
