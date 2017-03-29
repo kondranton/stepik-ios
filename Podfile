@@ -5,8 +5,8 @@ source 'https://github.com/CocoaPods/Specs.git'
 use_frameworks!
 
 def all_pods
-    pod 'Alamofire', :git => 'https://github.com/Homely/Alamofire.git', :branch => 'ios8'
-    pod 'SwiftyJSON', '3.1.0'
+    pod 'Alamofire', '~> 4.4'    
+    pod 'SwiftyJSON', '3.1.4'
     pod 'SDWebImage'
     pod 'TextFieldEffects'
     pod "DownloadButton"
@@ -32,24 +32,15 @@ def all_pods
     pod 'BEMCheckBox'
     pod 'IQKeyboardManagerSwift'
     pod 'Kanna', '~> 2.0.0'
-    pod 'CRToast'
+    pod 'CRToast', :git => 'https://github.com/cruffenach/CRToast.git', :branch => 'master'
     pod 'TUSafariActivity', '~> 1.0'
     
     pod "VK-ios-sdk" 
     pod 'FBSDKCoreKit'
     pod 'FBSDKLoginKit'
-    end
-
-#post_install do |installer|
-#    appmetricaPlistPath = "Pods/YandexMobileMetrica/dynamic/YandexMobileMetrica.framework/Info.plist"
-#    appmetricaVersion = `/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' #{appmetricaPlistPath}`.strip
-#    if ['2.6.0', '2.6.1', '2.6.2'].include? appmetricaVersion
-#        system("/usr/libexec/PlistBuddy -c 'Set :CFBundleIdentifier org.cocoapods.YandexMobileMetrica' #{appmetricaPlistPath}")
-#        system("plutil -convert binary1 #{appmetricaPlistPath}")
-#        else
-#        puts("Please, remove workaround for AppMetrica dynamic framework.")
-#    end
-#end
+    
+    pod 'SVGKit', :git => 'https://github.com/SVGKit/SVGKit.git', :branch => '2.x'
+end
 
 target 'Stepic' do
     all_pods
