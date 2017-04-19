@@ -45,6 +45,19 @@ class Video: NSManagedObject, JSONInitializable {
         return id == json["id"].intValue
     }
     
+    static func getNearestDefault(to quality: String) -> String {
+        let qualities = ["270", "360", "720", "1080"]
+        var minDifference = 10000
+        var res : String = "270"
+        for defaultQuality in qualities {
+            if abs(Int(defaultQuality)! - Int(quality)!) <  minDifference {
+                minDifference = abs(Int(defaultQuality)! - Int(quality)!)
+                res = defaultQuality
+            }
+        }
+        return res
+    }
+    
     func getNearestQualityToDefault(_ quality: String) -> String {
         var minDifference = 10000
         var res : String = "270"
@@ -79,14 +92,11 @@ class Video: NSManagedObject, JSONInitializable {
     
     var state : VideoState! {
         get {
-            print("getting state for video \(id)")
             if let s = _state {
-                print("state: \(s)")
                 return s
             } else {
                 if PathManager.sharedManager.doesExistVideoWith(id: id) {
                     if self.cachedQuality != nil && self.cachedQuality != "0" {
-                        print("found cachedQuality \(cachedQuality)")
                         _state = .cached
                     } else {
                         if self.cachedQuality != nil {
@@ -94,7 +104,6 @@ class Video: NSManagedObject, JSONInitializable {
                             CoreDataHelper.instance.save()
                         }
                         do { 
-                            print("deleting video, cachedQuality is nil")
                             let path = try PathManager.sharedManager.getPathForStoredVideoWithName(self.name)
                             try PathManager.sharedManager.deleteVideoFileAtPath(path)
                         } 
@@ -106,13 +115,11 @@ class Video: NSManagedObject, JSONInitializable {
                 } else {
                     _state = .online
                 }
-                print("state: \(_state!)")
 
                 return _state!
             }
         }
         set(value) {
-            print("setting state for video \(id) -> \(value)")
             _state = value
         }
     }
@@ -298,7 +305,7 @@ class Video: NSManagedObject, JSONInitializable {
                     return true
                 } else {
                     print("strange error deleting videos!")
-                    print(error.localizedFailureReason)
+                    print(error.localizedFailureReason ?? "")
                     print(error.code)
                     print(error.localizedDescription)
                     return false
@@ -338,7 +345,7 @@ class Video: NSManagedObject, JSONInitializable {
     fileprivate func getOnlineSizeForCurrentState(_ completion: ((Int64) -> Void)) {
         var quality : String
         if state == .online {
-            quality = VideosInfo.videoQuality
+            quality = VideosInfo.downloadingVideoQuality
         } else {
             quality = loadingQuality!
         }
@@ -356,7 +363,7 @@ class Video: NSManagedObject, JSONInitializable {
             } else {
                 json = response.result.value!
             }
-            let response = response.response
+//            let response = response.response
             
             print("size json")
             print(json)
@@ -367,7 +374,7 @@ class Video: NSManagedObject, JSONInitializable {
         do {
             let filePath = try PathManager.sharedManager.getPathForStoredVideoWithName(name)
 
-            let attr : NSDictionary? = try FileManager.default.attributesOfItem(atPath: filePath) as? NSDictionary
+            let attr : NSDictionary? = try FileManager.default.attributesOfItem(atPath: filePath) as NSDictionary
             
             if let _attr = attr {
                 completion(Int64(_attr.fileSize()));

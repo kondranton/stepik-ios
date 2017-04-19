@@ -21,7 +21,7 @@ class ProfileViewController: UITableViewController {
         
     @IBOutlet weak var streaksView: StreaksView!
     
-    var heightForRows = [[131], [75], [40]]
+    var heightForRows = [[131], [0], [40]]
     let selectionForRows = [[false], [false], [true]]
     let sectionTitles = [
         NSLocalizedString("UserInfo", comment: ""),
@@ -99,20 +99,22 @@ class ProfileViewController: UITableViewController {
             signInButton.isHidden = true
         }
         
-        _ = ApiDataDownloader.userActivities.retrieve(user: user.id, success: {
-            [weak self] 
-            activity in
-            if let s = self {
-                s.setStreaks(activity: activity)
-                s.heightForRows[1][0] = 108
-                s.tableView.beginUpdates()
-                s.tableView.endUpdates()
-            }
-        }, error: {
-            error in
-            
-            //TODO: Display error button
-        })
+        if AuthInfo.shared.isAuthorized {
+            _ = ApiDataDownloader.userActivities.retrieve(user: user.id, success: {
+                [weak self] 
+                activity in
+                if let s = self {
+                    s.setStreaks(activity: activity)
+                    s.heightForRows[1][0] = 108
+                    s.tableView.beginUpdates()
+                    s.tableView.endUpdates()
+                }
+            }, error: {
+                error in
+                
+                //TODO: Display error button
+            })
+        }
         
         print("beginning updates")
         tableView.reloadData()

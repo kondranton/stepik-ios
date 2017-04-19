@@ -116,7 +116,7 @@ class UserPreferencesTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        videoQualityLabel.text = "\(VideosInfo.videoQuality)p"
+//        videoQualityLabel.text = "\(VideosInfo.videoQuality)p"
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
         updateUser()
     }
@@ -176,7 +176,7 @@ class UserPreferencesTableViewController: UITableViewController {
     
     
     @IBAction func printTokenButtonPressed(_ sender: UIButton) {
-        print(AuthInfo.shared.token?.accessToken)
+        print(AuthInfo.shared.token?.accessToken ?? "")
     }
     
     @IBAction func printDocumentsPathButtonPressed(_ sender: UIButton) {

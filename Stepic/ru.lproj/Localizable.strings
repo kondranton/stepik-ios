@@ -140,6 +140,7 @@ Medium = "Среднее";
 VeryHigh = "Очень Высокое";
 WiFiLoadPreference = "Загрузка только по Wi-Fi";
 LoadingVideoQualityPreference = "Качество загружаемого видео";
+WatchingVideoQualityPreference = "Качество видео онлайн";
 SignOut = "Выйти";
 Profile = "Профиль";
 Preferences = "Настройки";
@@ -186,6 +187,33 @@ LongestStreak = "Личный рекорд";
 CurrentBestStreakAlertTopText = "Личный рекорд - отличная мотивация для того, чтобы учиться";
 CurrentBestStreakAlertBottomText = "Решайте задачи каждый день и улучшайте свои показатели!";
 ReceiveNotifications = "Получать напоминания";
+Teachers = "Преподаватели";
+YouAreSolving = "Вы решаете уже";
+SolveToImprove = "Решите задачу для улучшения результата!";
+TapToLearnAboutStreaks = "Нажмите, чтобы узнать о рекорде";
+AppStore = "AppStore";
+FeedbackAboutStepik = "Отзыв о приложении Stepik для iOS";
+HowWouldYouRateStepik = "Как бы Вы оценили Stepik?";
+PleaseLeaveFeedbackAppstore = "Пожалуйста, оставьте отзыв в AppStore";
+PleaseLeaveFeedbackEmail = "Пожалуйста, отправьте отзыв по электронной почте";
+ThankYou = "Спасибо!";
+Share = "Поделиться";
+CertificateWithDistinction = "Сертификат с отличием";
+Certificate = "Сертификат";
+CertificateDescriptionBody = "за прохождение курса";
+Result = "Результат";
+Downloads = "Загрузки";
+FindCourses = "Все курсы";
+MyCourses = "Мои курсы";
+Certificates = "Сертификаты";
+AnonymousCertificatesTitle = "Анонимные пользователи не могут иметь сертификаты";
+EmptyCertificatesTitle = "Ни одного сертификата";
+SignInToHaveCertificates = "Войдите, чтобы иметь возможность получить сертификат";
+EmptyCertificatesDescription = "Выберите курс и учитесь, чтобы получить сертификат";
+ChooseCourse = "Выбрать курс";
+CourseStaff = "Команда курса";
+Staff = "Команда Stepik";
+
 
 
 
