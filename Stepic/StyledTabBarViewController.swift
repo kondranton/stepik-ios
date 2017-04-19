@@ -11,16 +11,29 @@ import UIKit
 class StyledTabBarViewController: UITabBarController {
 
     
-    let titles = [
+    var titles = [
         NSLocalizedString("MyCourses", comment: ""),
         NSLocalizedString("FindCourses", comment: ""),
         NSLocalizedString("Downloads", comment: ""),
         NSLocalizedString("Certificates", comment: "")
     ]
     
+    var eventNames = [
+        AnalyticsEvents.Tabs.myCoursesClicked,
+        AnalyticsEvents.Tabs.findCoursesClicked,
+        AnalyticsEvents.Tabs.downloadsClicked,
+        AnalyticsEvents.Tabs.certificatesClicked
+    ]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         UICustomizer.sharedCustomizer.setStepicTabBar(tabBar)
+        
+        if !StepicApplicationsInfo.doesAllowCourseUnenrollment {
+            titles.remove(at: 1)
+            eventNames.remove(at: 1)
+        }
+        
         if let items = tabBar.items {
             for (index, item) in items.enumerated() {
                 item.title = titles[index]
@@ -47,18 +60,7 @@ class StyledTabBarViewController: UITabBarController {
     */
 
     func getEventNameForTabIndex(index: Int) -> String? {
-        switch index {
-        case 0:
-            return AnalyticsEvents.Tabs.myCoursesClicked
-        case 1:
-            return AnalyticsEvents.Tabs.findCoursesClicked
-        case 2:
-            return AnalyticsEvents.Tabs.downloadsClicked
-        case 3:
-            return AnalyticsEvents.Tabs.certificatesClicked
-        default:
-            return nil
-        }
+        return eventNames[index]
     }
     
 }

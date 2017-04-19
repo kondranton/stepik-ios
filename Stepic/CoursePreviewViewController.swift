@@ -110,7 +110,7 @@ class CoursePreviewViewController: UIViewController {
             }
             updateSections()
             
-            initBarButtonItems(dropAvailable: c.enrolled)
+            initBarButtonItems(dropAvailable: c.enrolled && StepicApplicationsInfo.doesAllowCourseUnenrollment)
         }
         didLoad = true
     }
@@ -159,7 +159,8 @@ class CoursePreviewViewController: UIViewController {
                     if #available(iOS 9.0, *) {
                         WatchDataHelper.parseAndAddPlainCourses(WatchCoursesDisplayingHelper.getCurrentlyDisplayingCourses())
                     } 
-                    self?.initBarButtonItems(dropAvailable: c.enrolled)
+                    self?.initBarButtonItems(dropAvailable: c.enrolled && StepicApplicationsInfo.doesAllowCourseUnenrollment)
+
                     _ = self?.navigationController?.popToRootViewController(animated: true)
                     }, error:  {
                         status in
@@ -361,10 +362,6 @@ class CoursePreviewViewController: UIViewController {
     
     
     @IBAction func joinButtonPressed(_ sender: UIButton) {
-        if !StepicApplicationsInfo.doesAllowCourseUnenrollment {
-            return
-        }
-        
         if !AuthInfo.shared.isAuthorized {
             AnalyticsReporter.reportEvent(AnalyticsEvents.CourseOverview.JoinPressed.anonymous, parameters: nil)
             RoutingManager.auth.routeFrom(controller: self, success: {
@@ -396,7 +393,7 @@ class CoursePreviewViewController: UIViewController {
                         WatchDataHelper.parseAndAddPlainCourses(WatchCoursesDisplayingHelper.getCurrentlyDisplayingCourses())
                     } 
                     self?.performSegue(withIdentifier: "showSections", sender: nil)
-                    self?.initBarButtonItems(dropAvailable: c.enrolled)
+                    self?.initBarButtonItems(dropAvailable: c.enrolled && StepicApplicationsInfo.doesAllowCourseUnenrollment)
                     }, error:  {
                         status in
                         SVProgressHUD.showError(withStatus: status)
