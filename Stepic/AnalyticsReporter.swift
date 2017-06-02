@@ -14,13 +14,11 @@ import YandexMobileMetrica
 class AnalyticsReporter {
     static func reportEvent(_ event: String, parameters: [String: Any]? = nil) {
         
-        guard let params = parameters as? [String: NSObject] else {
-            return
-        }
+        let params = parameters as? [String: NSObject]
         
         reportFirebaseEvent(event, parameters: params)
         reportAppMetricaEvent(event, parameters: params)
-        reportMixpanelEvent(event, parameters: params)
+        reportMixpanelEvent(event, parameters: parameters)
     }
     
     private static func reportFirebaseEvent(_ event: String, parameters: [String: NSObject]?) {
@@ -31,7 +29,7 @@ class AnalyticsReporter {
         YMMYandexMetrica.reportEvent(event, parameters: parameters, onFailure: nil)
     }
     
-    static func reportMixpanelEvent(_ event: String, parameters: [String: NSObject]?) {
+    static func reportMixpanelEvent(_ event: String, parameters: [String: Any]?) {
         var transformedParameters : Properties = [:]
         if let p = parameters {
             for (key, value) in p {

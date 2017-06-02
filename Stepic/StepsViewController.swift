@@ -13,7 +13,7 @@ enum StepsControllerPresentationContext {
     case lesson, unit
 }
 
-class StepsViewController: RGPageViewController {
+class StepsViewController: RGPageViewController, ShareableController {
     
     /*
      There are two ways of initializing the StepsViewController
@@ -23,6 +23,8 @@ class StepsViewController: RGPageViewController {
     var lesson : Lesson?
     var stepId : Int?
     var unitId : Int?
+    
+    var parentShareBlock : ((UIActivityViewController) -> (Void))? = nil
     
     var startStepId : Int = 0
         
@@ -107,7 +109,7 @@ class StepsViewController: RGPageViewController {
         
         updateTitle()
         
-        LastStepGlobalContext.context.unitId = unitId
+        LastStepGlobalContext.context.unitId = unitId // To presenter
         
         datasource = self
         delegate = self
@@ -116,20 +118,22 @@ class StepsViewController: RGPageViewController {
             self.view.isUserInteractionEnabled = false
         }
                 
-        refreshSteps()
+        refreshSteps() //To presenter
     }
     
-    static let stepUpdatedNotification = "StepUpdatedNotification"
+    static let stepUpdatedNotification = "StepUpdatedNotification" //To presenter
     
-    fileprivate var tabViewsForStepId = [Int: UIView]()
+    fileprivate var tabViewsForStepId = [Int: UIView]() //To presenter
     
+    
+    //To presenter
     func loadLesson() {
         guard let stepId = stepId else {
             print("ERROR: Load lesson without lesson and step id called")
             return
         }
 
-        self.view.isUserInteractionEnabled = false
+        self.view.isUserInteractionEnabled = false //To view
         self.doesPresentWarningView = false
         self.doesPresentActivityIndicatorView = true
         
@@ -172,10 +176,10 @@ class StepsViewController: RGPageViewController {
                 DispatchQueue.main.async{
                     [weak self] in
                     if let s = self {
-                        s.view.isUserInteractionEnabled = true
-                        s.doesPresentActivityIndicatorView = false
-                        if s.numberOfPages(for: s) == 0 {
-                            s.doesPresentWarningView = true
+                        s.view.isUserInteractionEnabled = true //To view
+                        s.doesPresentActivityIndicatorView = false //To view
+                        if s.numberOfPages(for: s) == 0 { //To view
+                            s.doesPresentWarningView = true //To view
                         }
                     }
                 }
@@ -186,10 +190,10 @@ class StepsViewController: RGPageViewController {
             DispatchQueue.main.async{
                 [weak self] in
                 if let s = self {
-                    s.view.isUserInteractionEnabled = true
-                    s.doesPresentActivityIndicatorView = false
-                    if s.numberOfPages(for: s) == 0 {
-                        s.doesPresentWarningView = true
+                    s.view.isUserInteractionEnabled = true //To view
+                    s.doesPresentActivityIndicatorView = false //To view
+                    if s.numberOfPages(for: s) == 0 { //To view
+                        s.doesPresentWarningView = true //To view
                     }
                 }
             }
@@ -213,7 +217,7 @@ class StepsViewController: RGPageViewController {
             }
         }
         
-        updateTitle()
+        updateTitle() //To view
 
     
         if let stepId = stepId {
@@ -226,80 +230,97 @@ class StepsViewController: RGPageViewController {
         
         var prevStepsIds = [Int]()
         if numberOfPages(for: self) == 0 {
-            self.view.isUserInteractionEnabled = false
-            self.doesPresentWarningView = false
-            self.doesPresentActivityIndicatorView = true
+            self.view.isUserInteractionEnabled = false //To view
+            self.doesPresentWarningView = false //To view
+            self.doesPresentActivityIndicatorView = true //To view
         } else {
             if let l = lesson, l.stepsArray.count == l.steps.count {
                 prevStepsIds = l.stepsArray
             } else {
-                self.view.isUserInteractionEnabled = false
-                self.doesPresentWarningView = false
-                self.doesPresentActivityIndicatorView = true
+                self.view.isUserInteractionEnabled = false //To view
+                self.doesPresentWarningView = false //To view
+                self.doesPresentActivityIndicatorView = true //To view
             }
         }
         
         
         lesson?.loadSteps(completion: {
             [weak self] in
-            if let s = self {
-                let newStepsSet = Set(s.lesson!.stepsArray)
-                let prevStepsSet = Set(prevStepsIds)
-                
-                var reloadBlock : ((Void)->Void) = {
-                    [weak self] in 
-                    self?.reloadData()
-                }
-                
-                if newStepsSet.symmetricDifference(prevStepsSet).count == 0 {
-                    //need to reload one by one
-                    reloadBlock = {
-                        NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: StepsViewController.stepUpdatedNotification), object: nil)
-                        print("did send step updated notification")
-                        //update tab views
-                        for index in 0 ..< s.lesson!.steps.count { 
-                            let tabView = s.pageViewController(s, tabViewForPageAt: index) as? StepTabView
-                            if let progress = s.lesson!.steps[index].progress {
-                                tabView?.setTab(selected: progress.isPassed, animated: true)
-                            }
+            guard let s = self else {
+                return
+            }
+            let newStepsSet = Set(s.lesson!.stepsArray)
+            let prevStepsSet = Set(prevStepsIds)
+            
+            //To view
+            var reloadBlock : ((Void)->Void) = {
+                [weak self] in 
+                self?.reloadData()
+            }
+            
+            if newStepsSet.symmetricDifference(prevStepsSet).count == 0 {
+                //need to reload one by one
+                reloadBlock = {
+                    [weak self] in
+                    guard let s = self else {
+                        return
+                    }
+                    NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: StepsViewController.stepUpdatedNotification), object: nil)
+                    print("did send step updated notification")
+                    //update tab views
+                    //To view
+                    for index in 0 ..< s.lesson!.steps.count { 
+                        let tabView = s.pageViewController(s, tabViewForPageAt: index) as? StepTabView
+                        if let progress = s.lesson!.steps[index].progress {
+                            tabView?.setTab(selected: progress.isPassed, animated: true)
                         }
                     }
-                } 
-                
-                DispatchQueue.main.async {
-                    s.view.isUserInteractionEnabled = true
-                    reloadBlock()
-                    s.doesPresentWarningView = false
-                    s.doesPresentActivityIndicatorView = false
-                    
-                    if s.startStepId < s.lesson!.steps.count {
-                        if !s.didSelectTab {
-                            s.selectTabAtIndex(s.startStepId, updatePage: true)
-                            s.didSelectTab = true
-                        }
-                    }
-                    s.didInitSteps = true
                 }
+            } 
+            
+            DispatchQueue.main.async {
+                [weak self] in
+                guard let s = self else {
+                    return
+                }
+                s.view.isUserInteractionEnabled = true //To view
+                reloadBlock()
+                s.doesPresentWarningView = false //To view
+                s.doesPresentActivityIndicatorView = false //To view
+                
+                if s.startStepId < s.lesson!.steps.count {
+                    if !s.didSelectTab {
+                        s.selectTabAtIndex(s.startStepId, updatePage: true) //To view
+                        s.didSelectTab = true
+                    }
+                }
+                s.didInitSteps = true
             }
             }, error: {
+                [weak self]
                 errorText in
+                guard self != nil else {
+                    return
+                }
                 print("error while loading steps in stepsviewcontroller")
                 DispatchQueue.main.async{
                     [weak self] in
-                    if let s = self {
-                        s.view.isUserInteractionEnabled = true
-                        s.doesPresentActivityIndicatorView = false
-                        if s.numberOfPages(for: s) == 0 {
-                            s.doesPresentWarningView = true
-                            if s.startStepId < s.lesson!.steps.count {
-                                if !s.didSelectTab {
-                                    s.selectTabAtIndex(s.startStepId, updatePage: true)
-                                    s.didSelectTab = true
-                                }
+                    guard let s = self else {
+                        return
+                    }
+                    s.view.isUserInteractionEnabled = true //To view
+                    s.doesPresentActivityIndicatorView = false //To view
+                    if s.numberOfPages(for: s) == 0 {
+                        s.doesPresentWarningView = true // To view
+                    } else {
+                        if s.startStepId < s.lesson!.steps.count {
+                            if !s.didSelectTab {
+                                s.selectTabAtIndex(s.startStepId, updatePage: true) //To view
+                                s.didSelectTab = true
                             }
-                            self?.didInitSteps = true
                         }
                     }
+                    self?.didInitSteps = true
                 }
             }, onlyLesson: context == .lesson)
     }
@@ -388,6 +409,44 @@ class StepsViewController: RGPageViewController {
     }
     
     var pagesCount = 0
+    
+    deinit {
+        print("deinit StepsViewController")
+    }
+    
+    func share(popoverSourceItem: UIBarButtonItem?, popoverView: UIView?, fromParent: Bool) {
+        guard let lesson = self.lesson else {
+            return
+        }
+        let url = "\(StepicApplicationsInfo.stepicURL)/lesson/\(lesson.slug)/step/1?from_mobile_app=true"
+        
+        let shareBlock: ((UIActivityViewController) -> (Void))? = parentShareBlock
+        
+        DispatchQueue.global(qos: .background).async {
+            [weak self] in
+            let shareVC = SharingHelper.getSharingController(url)
+            shareVC.popoverPresentationController?.barButtonItem = popoverSourceItem
+            shareVC.popoverPresentationController?.sourceView = popoverView
+            DispatchQueue.main.async {
+                [weak self] in
+                if !fromParent {
+                    self?.present(shareVC, animated: true, completion: nil)
+                } else {
+                    shareBlock?(shareVC)
+                }
+            }
+        }
+    }
+    
+    @available(iOS 9.0, *)
+    override var previewActionItems: [UIPreviewActionItem] {
+        let shareItem = UIPreviewAction(title: NSLocalizedString("Share", comment: ""), style: .default, handler: {
+            [weak self]
+            action, vc in
+            self?.share(popoverSourceItem: nil, popoverView: nil, fromParent: true)
+        })
+        return [shareItem]
+    }
 }
 
 extension StepsViewController : RGPageViewControllerDataSource {
@@ -411,9 +470,7 @@ extension StepsViewController : RGPageViewControllerDataSource {
         
         if let step = lesson?.steps[index] {
             print("initializing tab view for step id \(step.id), progress is \(String(describing: step.progress)))")
-            //            if tabViewsForStepId[step.id] == nil {
             tabViewsForStepId[step.id] = StepTabView(frame: CGRect(x: 0, y: 0, width: 25, height: 25), image: step.block.image, stepId: step.id, passed: step.progress?.isPassed ?? false)
-            //            }
             
             return tabViewsForStepId[step.id]!
         } else {
@@ -448,13 +505,13 @@ extension StepsViewController : RGPageViewControllerDataSource {
             if lesson.steps[index].block.name == "video" {
                 let stepController = storyboard?.instantiateViewController(withIdentifier: "VideoStepViewController") as! VideoStepViewController
                 stepController.video = lesson.steps[index].block.video!
-                stepController.nItem = self.navigationItem
                 stepController.step = lesson.steps[index]
-                stepController.parentNavigationController = self.navigationController
+//                stepController.parentNavigationController = self.navigationController
                 stepController.startStepId = startStepId
                 stepController.stepId = index + 1
                 stepController.lessonSlug = lesson.slug
-                
+                stepController.nItem = self.navigationItem
+
                 if let assignments = lesson.unit?.assignments {
                     if index < assignments.count {
                         stepController.assignment = assignments[index]
@@ -491,7 +548,7 @@ extension StepsViewController : RGPageViewControllerDataSource {
                 return stepController
             } else {
                 let stepController = storyboard?.instantiateViewController(withIdentifier: "WebStepViewController") as! WebStepViewController
-                stepController.stepsVC = self
+//                stepController.stepsVC = self
                 stepController.step = lesson.steps[index]
                 stepController.lesson = lesson
                 stepController.stepId = index + 1

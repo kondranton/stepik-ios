@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import FLKAutoLayout
 import SVProgressHUD
+import Agrume
 
 class WebStepViewController: UIViewController {
     
@@ -36,8 +37,9 @@ class WebStepViewController: UIViewController {
     var nextLessonHandler: ((Void)->Void)?
     var prevLessonHandler: ((Void)->Void)?
     
-    weak var stepsVC : StepsViewController!
+    weak var lessonView : LessonView?
     
+    var nController : UINavigationController?
     var nItem : UINavigationItem!
     var didStartLoadingFirstRequest = false
     
@@ -68,8 +70,10 @@ class WebStepViewController: UIViewController {
         stepWebView.scrollView.backgroundColor = UIColor.white
 //        stepWebView.backgroundColor = UIColor.white
         
-        scrollHelper = WebViewHorizontalScrollHelper(webView: stepWebView, onView: self.view, pagerPanRecognizer: stepsVC.pagerScrollView!.panGestureRecognizer)
-        print(self.view.gestureRecognizers ?? "")
+        if let recognizer = lessonView?.pagerGestureRecognizer {
+            scrollHelper = WebViewHorizontalScrollHelper(webView: stepWebView, onView: self.view, pagerPanRecognizer: recognizer)
+            print(self.view.gestureRecognizers ?? "")
+        }
         
         nextLessonButton.setTitle("  \(NSLocalizedString("NextLesson", comment: ""))  ", for: UIControlState())
         prevLessonButton.setTitle("  \(NSLocalizedString("PrevLesson", comment: ""))  ", for: UIControlState())
@@ -136,6 +140,10 @@ class WebStepViewController: UIViewController {
 
         resetWebViewHeight(Float(getContentHeight(stepWebView)))
         loadStepHTML()
+        
+        if let discussionCount = step.discussionsCount {
+            discussionCountView.commentsCount = discussionCount
+        }
     }
     
     func updatedStepNotification(_ notification: Foundation.Notification) {
@@ -149,7 +157,7 @@ class WebStepViewController: UIViewController {
             if htmlText == stepText {
                 return
             }
-            let scriptsString = "\(Scripts.localTexScript)"
+            let scriptsString = "\(Scripts.localTexScript)\(Scripts.clickableImagesScript)"
             var html = HTMLBuilder.sharedBuilder.buildHTMLStringWith(head: scriptsString, body: htmlText, width: Int(UIScreen.main.bounds.width))
             html = html.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
             print("\(Bundle.main.bundlePath)")
@@ -221,6 +229,19 @@ class WebStepViewController: UIViewController {
         }
     }
     
+    fileprivate func animateTabSelection() {
+        //Animate the views
+        if let cstep = self.step {
+            if cstep.block.name == "text" {
+                NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: StepDoneNotificationKey), object: nil, userInfo: ["id" : cstep.id])
+                DispatchQueue.main.async {
+                    cstep.progress?.isPassed = true
+                    CoreDataHelper.instance.save()
+                }
+            }
+        }
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 //        self.view.setNeedsLayout()
@@ -232,7 +253,7 @@ class WebStepViewController: UIViewController {
             AnalyticsReporter.reportEvent(AnalyticsEvents.Step.hasRestrictions, parameters: nil)
         }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(WebStepViewController.updatedStepNotification(_:)), name: NSNotification.Name(rawValue: StepsViewController.stepUpdatedNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(WebStepViewController.updatedStepNotification(_:)), name: NSNotification.Name(rawValue: LessonPresenter.stepUpdatedNotification), object: nil)
 
         let stepid = step.id
         print("view did appear for web step with id \(stepid)")
@@ -244,19 +265,41 @@ class WebStepViewController: UIViewController {
         }
         
         if shouldSendViewsBlock() {
+
             //Send view to views
             performRequest({
                 [weak self] in
                 print("Sending view for step with id \(stepid) & assignment \(String(describing: self?.assignment?.id))")
                 _ = ApiDataDownloader.views.create(stepId: stepid, assignment: self?.assignment?.id, success: {
                     [weak self] in
-                    if let cstep = self?.step {
-                        if cstep.block.name == "text" {
-                                NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: StepDoneNotificationKey), object: nil, userInfo: ["id" : cstep.id])
-                            DispatchQueue.main.async {
-                                cstep.progress?.isPassed = true
-                                CoreDataHelper.instance.save()
-                            }                    
+                    self?.animateTabSelection()
+                }, error: {
+                    [weak self]
+                    error in
+                    
+                    switch error {
+                    case .notAuthorized:
+                        return
+                    default:
+                        self?.animateTabSelection()
+                        print("initializing post views task")
+                        print("user id \(String(describing: AuthInfo.shared.userId)) , token \(String(describing: AuthInfo.shared.token))")
+                        if let userId =  AuthInfo.shared.userId,
+                            let token = AuthInfo.shared.token {
+                            
+                            let task = PostViewsExecutableTask(stepId: stepid, assignmentId: self?.assignment?.id, userId: userId)
+                            ExecutionQueues.sharedQueues.connectionAvailableExecutionQueue.push(task)
+                            
+                            let userPersistencyManager = PersistentUserTokenRecoveryManager(baseName: "Users")
+                            userPersistencyManager.writeStepicToken(token, userId: userId)
+                            
+                            let taskPersistencyManager = PersistentTaskRecoveryManager(baseName: "Tasks")
+                            taskPersistencyManager.writeTask(task, name: task.id)
+                            
+                            let queuePersistencyManager = PersistentQueueRecoveryManager(baseName: "Queues")
+                            queuePersistencyManager.writeQueue(ExecutionQueues.sharedQueues.connectionAvailableExecutionQueue, key: ExecutionQueues.sharedQueues.connectionAvailableExecutionQueueKey)
+                        } else {
+                            print("Could not get current user ID or token to post views")
                         }
                     }
                 })
@@ -277,7 +320,7 @@ class WebStepViewController: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: StepsViewController.stepUpdatedNotification), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: LessonPresenter.stepUpdatedNotification), object: nil)
     }
     
     //Measured in seconds
@@ -368,7 +411,8 @@ class WebStepViewController: UIViewController {
             let vc = DiscussionsViewController(nibName: "DiscussionsViewController", bundle: nil) 
             vc.discussionProxyId = discussionProxyId
             vc.target = self.step.id
-            navigationController?.pushViewController(vc, animated: true)
+            vc.step = self.step
+            nController?.pushViewController(vc, animated: true)
         } else {
             //TODO: Load comments here
         }
@@ -384,7 +428,7 @@ class WebStepViewController: UIViewController {
     
     deinit {
         print("deinit webstepviewcontroller")
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: StepsViewController.stepUpdatedNotification), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: LessonPresenter.stepUpdatedNotification), object: nil)
     }
     
     var isCurrentlyUpdatingHeight: Bool = false
@@ -430,13 +474,25 @@ extension WebStepViewController : UIWebViewDelegate {
                 if index + 1 < components.count {
                     let urlStepIdString = components[index + 1]
                     if let urlStepId = Int(urlStepIdString) {
-                        stepsVC.selectTabAtIndex(urlStepId - 1, updatePage: true)
+                        lessonView?.selectTab(index: urlStepId - 1, updatePage: true)
                         return false
                     }
                 }
             }
         }
         
+        if url.scheme == "openimg" {
+            var urlString = url.absoluteString
+            urlString.removeSubrange(urlString.startIndex..<urlString.index(urlString.startIndex, offsetBy: 10))
+            if let offset = urlString.indexOf("//") {
+                urlString.insert(":", at: urlString.index(urlString.startIndex, offsetBy: offset))
+                if let newUrl = URL(string: urlString) {
+                    let agrume = Agrume(imageUrl: newUrl)
+                    agrume.showFrom(self)
+                }
+            }
+            return false
+        }
         
         if didStartLoadingFirstRequest {
             if url.scheme != "file" {

@@ -87,6 +87,7 @@ struct AnalyticsEvents {
     }
     
     struct VideoPlayer {
+        static let opened = "video_player_opened"
         static let rateChanged = "video_rate_changed"
         static let qualityChanged = "video_quality_changed"
     }
@@ -110,11 +111,7 @@ struct AnalyticsEvents {
         static let downloadsClicked = "main_choice_downloads"
         static let certificatesClicked = "main_choice_certificates"
     }
-    
-    struct Token {
-        static let requestedNotNilToken = "token_requested_not_nil"
-    }
-    
+   
     struct Streaks {
         static let preferencesOn = "streak_notification_pref_on"
         static let preferencesOff = "streak_notification_pref_off"
@@ -172,5 +169,35 @@ struct AnalyticsEvents {
     struct Certificates {
         static let opened = "certificates_opened_certificate"
         static let shared = "certificates_pressed_share_certificate"
+    }
+    
+    struct Adaptive {
+        static let correctAnswer = "correct_answer"
+        static let firstOpen = "first_open"
+        static let onboardingFinished = "onboarding_finished"
+        struct Reaction {
+            static let easy = "reaction_easy"
+            static let hard = "reaction_hard"
+        }
+    }
+    
+    struct PeekNPop {
+        struct Course {
+            static let peeked = "3dtouch_course_peeked"
+            static let popped = "3dtouch_course_popped"
+            static let shared = "3dtouch_course_shared"
+        }
+        
+        struct Section {
+            static let peeked = "3dtouch_section_peeked"
+            static let popped = "3dtouch_section_popped"
+            static let shared = "3dtouch_section_shared"
+        }
+        
+        struct Lesson {
+            static let peeked = "3dtouch_lesson_peeked"
+            static let popped = "3dtouch_lesson_popped"
+            static let shared = "3dtouch_lesson_shared"
+        }
     }
 }

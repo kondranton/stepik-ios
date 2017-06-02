@@ -10,7 +10,7 @@ import UIKit
 import DownloadButton
 import DZNEmptyDataSet
 
-class UnitsViewController: UIViewController {
+class UnitsViewController: UIViewController, ShareableController, UIViewControllerPreviewingDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     
@@ -24,6 +24,8 @@ class UnitsViewController: UIViewController {
     
     var didRefresh = false
     let refreshControl = UIRefreshControl()
+
+    var parentShareBlock : ((UIActivityViewController) -> (Void))? = nil
 
     fileprivate func updateTitle() {
         self.navigationItem.title = section?.title ?? NSLocalizedString("Module", comment: "")
@@ -57,7 +59,12 @@ class UnitsViewController: UIViewController {
         refreshControl.beginRefreshing()
         
         refreshUnits() 
-        // Do any additional setup after loading the view.
+
+        if #available(iOS 9.0, *) {
+            if(traitCollection.forceTouchCapability == .available) {
+                registerForPreviewing(with: self, sourceView: view)
+            }
+        }
     }
 
     var url : String? {
@@ -86,6 +93,38 @@ class UnitsViewController: UIViewController {
         }
     }
     
+    func share(popoverSourceItem: UIBarButtonItem?, popoverView: UIView?, fromParent: Bool) {
+        guard let url = self.url else {
+            return
+        }
+        AnalyticsReporter.reportEvent(AnalyticsEvents.Units.shared, parameters: nil)
+        let shareBlock: ((UIActivityViewController) -> (Void))? = parentShareBlock
+
+        DispatchQueue.global(qos: .background).async {
+            [weak self] in
+            let shareVC = SharingHelper.getSharingController(url)
+            shareVC.popoverPresentationController?.barButtonItem = popoverSourceItem
+            shareVC.popoverPresentationController?.sourceView = popoverView
+            DispatchQueue.main.async {
+                [weak self] in
+                if !fromParent {
+                    self?.present(shareVC, animated: true, completion: nil)
+                } else {
+                    shareBlock?(shareVC)
+                }
+            }
+        }
+    }
+    
+    @available(iOS 9.0, *)
+    override var previewActionItems: [UIPreviewActionItem] {
+        let shareItem = UIPreviewAction(title: NSLocalizedString("Share", comment: ""), style: .default, handler: {
+            [weak self]
+            action, vc in
+            self?.share(popoverSourceItem: nil, popoverView: nil, fromParent: true)
+        })
+        return [shareItem]
+    }
     
     func getSectionByUnit(id: Int) {
         //Search for unit by its id locally
@@ -211,22 +250,27 @@ class UnitsViewController: UIViewController {
         }
         
         if segue.identifier == "showSteps" || segue.identifier == "replaceSteps" {
-            let dvc = segue.destination as! StepsViewController
+            let dvc = segue.destination as! LessonViewController
             dvc.hidesBottomBarWhenPushed = true
             if let stepsPresentation = sender as? StepsPresentation {
+                
+                var stepId : Int? = nil
+                var startStepId: Int = 0
                 
                 let index = stepsPresentation.index
                 if stepsPresentation.isLastStep {
                     if let l = section.units[index].lesson {
-                        dvc.startStepId = l.stepsArray.count - 1
+                        startStepId = l.stepsArray.count - 1
+                        stepId = l.stepsArray.last
                     }
                 }
-                dvc.lesson = section.units[index].lesson
+                
+                dvc.initObjects = (lesson: section.units[index].lesson!, startStepId: startStepId, context: .unit)
+                dvc.initIds = (stepId: stepId, unitId: section.units[index].id)
+                
                 dvc.sectionNavigationDelegate = self
-                dvc.unitId = section.units[index].id
                 currentlyDisplayingUnitIndex = index
-                dvc.shouldNavigateToPrev = index != 0
-                dvc.shouldNavigateToNext = index < section.units.count - 1
+                dvc.navigationRules = (prev: index != 0, next: index < section.units.count - 1)
             }
         }
         // Get the new view controller using segue.destinationViewController.
@@ -246,7 +290,57 @@ class UnitsViewController: UIViewController {
             }
         }
     }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        
+        guard let units = section?.units else {
+            return nil
+        }
+        
+        let locationInTableView = tableView.convert(location, from: self.view)
+        
+        guard let indexPath = tableView.indexPathForRow(at: locationInTableView) else {
+            return nil
+        }
+        
+        guard indexPath.row < units.count else {
+            return nil
+        }
+        
+        guard let cell = tableView.cellForRow(at: indexPath) as? UnitTableViewCell else {
+            return nil
+        }
 
+        if #available(iOS 9.0, *) {
+            previewingContext.sourceRect = cell.frame
+        } else {
+            return nil
+        }
+        
+        guard let stepsVC = ControllerHelper.instantiateViewController(identifier: "LessonViewController") as? LessonViewController else {
+            return nil
+        }
+        
+        guard let lesson = units[indexPath.row].lesson else {
+            return nil
+        }
+        
+        AnalyticsReporter.reportEvent(AnalyticsEvents.PeekNPop.Lesson.peeked)
+        stepsVC.initObjects = (lesson: lesson, startStepId: 0, context: .unit)
+        stepsVC.parentShareBlock = {
+            [weak self]
+            shareVC in
+            AnalyticsReporter.reportEvent(AnalyticsEvents.PeekNPop.Lesson.shared)
+            shareVC.popoverPresentationController?.sourceView = cell
+            self?.present(shareVC, animated: true, completion: nil)
+        }
+        return stepsVC
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        show(viewControllerToCommit, sender: self)
+        AnalyticsReporter.reportEvent(AnalyticsEvents.PeekNPop.Lesson.popped)
+    }
 }
 
 class StepsPresentation {

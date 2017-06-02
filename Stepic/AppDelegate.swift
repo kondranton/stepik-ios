@@ -8,9 +8,7 @@
 
 import UIKit
 import MediaPlayer
-import Fabric
-import Crashlytics
-import Firebase 
+import Firebase
 import FirebaseMessaging
 import IQKeyboardManagerSwift
 import SVProgressHUD
@@ -27,9 +25,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        Fabric.with([Crashlytics.self])
-		
+
+        AnalyticsHelper.sharedHelper.setupAnalytics()
+
 		if #available(iOS 9.0, *) {
 			WatchSessionManager.sharedManager.startSession()
 		}
@@ -37,22 +35,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         MagicalRecord.setupCoreDataStackWithAutoMigratingSqliteStore(at: CoreDataHelper.instance.storeURL as URL)
         SVProgressHUD.setMinimumDismissTimeInterval(0.5)
         
-//        setVideoTestRootController()
         ConnectionHelper.shared.instantiate()
         if !AudioManager.sharedManager.initAudioSession() {
             print("Could not initialize audio session")
         }
         
-        FIRApp.configure()
-        FIRAppIndexing.sharedInstance().registerApp(1064581926)
-        
-        Mixpanel.initialize(token: "cc80751831012d6a0de6bba73ec2f556")
+        FIRAppIndexing.sharedInstance().registerApp(Tokens.shared.firebaseId)
+
         AnalyticsReporter.reportMixpanelEvent(AnalyticsEvents.App.opened, parameters: nil)
-        
         
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
-        YMMYandexMetrica.activate(withApiKey: "fd479031-bdf4-419e-8d8f-6895aab23502")
         
         NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.didReceiveRegistrationToken(_:)), name: NSNotification.Name.firInstanceIDTokenRefresh, object: nil)
         
@@ -256,17 +249,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-//    func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
-//        print("opened app via url \(url.absoluteString)")
-//        let codeOpt = Parser.sharedParser.codeFromURL(url)
-//        if let code = codeOpt {
-//            NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: "ReceivedAuthorizationCodeNotification"), object: self, userInfo: ["code": code])            
-//        } else {
-//            print("error while authentificating")
-//        }
-//        return true
-//    }
-    
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         NotificationRegistrator.sharedInstance.getGCMRegistrationToken(deviceToken: deviceToken)
     }
@@ -327,7 +309,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if FBSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: sourceApplication, annotation: annotation) {
             return true
         }
-        if url.scheme == "vk5628680" || url.scheme == "fb171127739724012" {
+        if url.scheme == "vk\(StepicApplicationsInfo.SocialInfo.AppIds.vk)" || url.scheme == "fb\(StepicApplicationsInfo.SocialInfo.AppIds.facebook)" {
             return true
         }
         let codeOpt = Parser.sharedParser.codeFromURL(url)
@@ -343,8 +325,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("completed background task with id: \(identifier)")
         completionHandler()
     }
-    
-    
     
     func applicationWillTerminate(_ application: UIApplication) {
 //        CoreDataHelper.instance.deleteAllPending()

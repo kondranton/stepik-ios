@@ -14,9 +14,7 @@ import FLKAutoLayout
 
 class VideoStepViewController: UIViewController {
     
-    var moviePlayer : MPMoviePlayerController? = nil
     var video : Video!
-    var nItem : UINavigationItem!
     var step: Step!
     var stepId : Int!
     var lessonSlug: String!
@@ -27,10 +25,14 @@ class VideoStepViewController: UIViewController {
 
     var assignment : Assignment?
     
-    var parentNavigationController : UINavigationController?
-    
     var nextLessonHandler: ((Void)->Void)?
     var prevLessonHandler: ((Void)->Void)?
+    
+    var nController : UINavigationController?
+    var nItem : UINavigationItem!
+
+    //variable for sending analytics correctly - if view appears after dismissing video player, the event is not being sent
+    var didPresentVideoPlayer: Bool = false
     
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var thumbnailImageView: UIImageView!
@@ -45,18 +47,12 @@ class VideoStepViewController: UIViewController {
     
     @IBOutlet weak var prevNextLessonButtonsContainerViewHeight: NSLayoutConstraint!
     
-    
-//    @IBOutlet weak var discussionToPrevDistance: NSLayoutConstraint!
-//    @IBOutlet weak var discussionToNextDistance: NSLayoutConstraint!
-//    @IBOutlet weak var prevToBottomDistance: NSLayoutConstraint!
-//    @IBOutlet weak var nextToBottomDistance: NSLayoutConstraint!
-    
     var imageTapHelper : ImageTapHelper!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(VideoStepViewController.updatedStepNotification(_:)), name: NSNotification.Name(rawValue: StepsViewController.stepUpdatedNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(VideoStepViewController.updatedStepNotification(_:)), name: NSNotification.Name(rawValue: LessonPresenter.stepUpdatedNotification), object: nil)
         
         imageTapHelper = ImageTapHelper(imageView: thumbnailImageView, action: { 
             [weak self]
@@ -77,10 +73,12 @@ class VideoStepViewController: UIViewController {
             return
         }
         DispatchQueue.global(qos: .default).async {
+            [weak self] in
             let shareVC = SharingHelper.getSharingController(StepicApplicationsInfo.stepicURL + "/lesson/" + slug + "/step/" + "\(stepid)")
             shareVC.popoverPresentationController?.barButtonItem = item
             DispatchQueue.main.async {
-                self.present(shareVC, animated: true, completion: nil)
+                [weak self] in
+                self?.present(shareVC, animated: true, completion: nil)
             }
         }
     }
@@ -114,10 +112,6 @@ class VideoStepViewController: UIViewController {
             nextLessonButtonHeight.constant = 0
             prevLessonButtonHeight.constant = 0
             prevNextLessonButtonsContainerViewHeight.constant = 0
-//            discussionToNextDistance.constant = 0
-//            discussionToPrevDistance.constant = 0
-//            prevToBottomDistance.constant = 0
-//            nextToBottomDistance.constant = 0
         }
     }
     
@@ -143,12 +137,15 @@ class VideoStepViewController: UIViewController {
             let player = StepicVideoPlayerViewController(nibName: "StepicVideoPlayerViewController", bundle: nil)
             player.video = self.video
             self.present(player, animated: true, completion: {
+                [weak self] in
                 print("stepic player successfully presented!")
+                self?.didPresentVideoPlayer = true
+                AnalyticsReporter.reportEvent(AnalyticsEvents.VideoPlayer.opened, parameters: nil)
             })
         } else {
-            if let vc = self.parentNavigationController {
-                Messages.sharedManager.showConnectionErrorMessage(inController: vc)
-            }
+//            if let vc = self.parentNavigationController {
+//                Messages.sharedManager.showConnectionErrorMessage(inController: vc)
+//            }
         }
     }
     
@@ -171,28 +168,73 @@ class VideoStepViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    fileprivate func animateTabSelection() {
+        //Animate the views
+        if let cstep = self.step {
+            if cstep.block.name == "video" {
+                NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: StepDoneNotificationKey), object: nil, userInfo: ["id" : cstep.id])
+                DispatchQueue.main.async {
+                    cstep.progress?.isPassed = true
+                    CoreDataHelper.instance.save()
+                }
+            }
+        }
+    }
+
+    
     override func viewDidAppear(_ animated: Bool) {
-        guard let cstep = step else {
+        guard (step) != nil else {
             return
         }
         
-        AnalyticsReporter.reportEvent(AnalyticsEvents.Step.opened, parameters: ["item_name": step.block.name as NSObject])
+        if !didPresentVideoPlayer {
+            AnalyticsReporter.reportEvent(AnalyticsEvents.Step.opened, parameters: ["item_name": step.block.name as NSObject])
+        } else {
+            didPresentVideoPlayer = false
+        }
 
         let stepid = step.id         
         if stepId - 1 == startStepId {
             startStepBlock()
         }
         if shouldSendViewsBlock() {
+            
             performRequest({
                 [weak self] in
                 print("Sending view for step with id \(stepid) & assignment \(String(describing: self?.assignment?.id))")
                 _ = ApiDataDownloader.views.create(stepId: stepid, assignment: self?.assignment?.id, success: {
-                    NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: StepDoneNotificationKey), object: nil, userInfo: ["id" : cstep.id])
-                    UIThread.performUI{
-                        cstep.progress?.isPassed = true
-                        CoreDataHelper.instance.save()
+                    [weak self] in
+                    self?.animateTabSelection()
+                }, error: {
+                    [weak self]
+                    error in
+                    
+                    switch error {
+                    case .notAuthorized:
+                        return
+                    default:
+                        self?.animateTabSelection()
+                        print("initializing post views task")
+                        print("user id \(String(describing: AuthInfo.shared.userId)) , token \(String(describing: AuthInfo.shared.token))")
+                        if let userId =  AuthInfo.shared.userId,
+                            let token = AuthInfo.shared.token {
+                            
+                            let task = PostViewsExecutableTask(stepId: stepid, assignmentId: self?.assignment?.id, userId: userId)
+                            ExecutionQueues.sharedQueues.connectionAvailableExecutionQueue.push(task)
+                            
+                            let userPersistencyManager = PersistentUserTokenRecoveryManager(baseName: "Users")
+                            userPersistencyManager.writeStepicToken(token, userId: userId)
+                            
+                            let taskPersistencyManager = PersistentTaskRecoveryManager(baseName: "Tasks")
+                            taskPersistencyManager.writeTask(task, name: task.id)
+                            
+                            let queuePersistencyManager = PersistentQueueRecoveryManager(baseName: "Queues")
+                            queuePersistencyManager.writeQueue(ExecutionQueues.sharedQueues.connectionAvailableExecutionQueue, key: ExecutionQueues.sharedQueues.connectionAvailableExecutionQueueKey)
+                        } else {
+                            print("Could not get current user ID or token to post views")
+                        }
                     }
-                }) 
+                })
             })
         }
     }
@@ -206,7 +248,7 @@ class VideoStepViewController: UIViewController {
             let vc = DiscussionsViewController(nibName: "DiscussionsViewController", bundle: nil) 
             vc.discussionProxyId = discussionProxyId
             vc.target = self.step.id
-            navigationController?.pushViewController(vc, animated: true)
+            nController?.pushViewController(vc, animated: true)
         } else {
             //TODO: Load comments here
         }
@@ -218,6 +260,10 @@ class VideoStepViewController: UIViewController {
     
     @IBAction func nextLessonPressed(_ sender: UIButton) {
         nextLessonHandler?()
+    }
+    
+    deinit {
+        print("deinit VideoStepViewController")
     }
     
     /*
@@ -243,7 +289,7 @@ extension VideoStepViewController : PKDownloadButtonDelegate {
         case .startDownload: 
             
             if !ConnectionHelper.shared.isReachable {
-                Messages.sharedManager.show3GDownloadErrorMessage(inController: self.navigationController!)
+                Messages.sharedManager.show3GDownloadErrorMessage(inController: self.nController ?? UIViewController())
                 print("Not reachable to download")
                 return
             }
@@ -251,13 +297,19 @@ extension VideoStepViewController : PKDownloadButtonDelegate {
             downloadButton.state = .downloading
             video.store(VideosInfo.downloadingVideoQuality, progress: {
                 prog in
-                UIThread.performUI({downloadButton.stopDownloadButton?.progress = CGFloat(prog)})
+                UIThread.performUI({
+                    downloadButton.stopDownloadButton?.progress = CGFloat(prog)
+                })
                 }, completion: {
                     completed in
                     if completed {
-                        UIThread.performUI({downloadButton.state = .downloaded})
+                        UIThread.performUI({
+                            downloadButton.state = .downloaded
+                        })
                     } else {
-                        UIThread.performUI({downloadButton.state = .startDownload})
+                        UIThread.performUI({
+                            downloadButton.state = .startDownload
+                        })
                     }
                 }, error: {
                     error in

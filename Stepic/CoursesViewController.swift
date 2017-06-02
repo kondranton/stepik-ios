@@ -12,7 +12,7 @@ import FLKAutoLayout
 import DZNEmptyDataSet
 import SVProgressHUD
 
-class CoursesViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
+class CoursesViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate, UIViewControllerPreviewingDelegate {
     
     var tableView = UITableView()
     
@@ -70,6 +70,12 @@ class CoursesViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyDa
         tableView.emptyDataSetSource = self
         
         lastUser = AuthInfo.shared.user
+        
+        if #available(iOS 9.0, *) {
+            if(traitCollection.forceTouchCapability == .available) {
+                registerForPreviewing(with: self, sourceView: view)
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -387,24 +393,24 @@ class CoursesViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyDa
         guard 
         let sectionsVC = ControllerHelper.instantiateViewController(identifier: "SectionsViewController") as? SectionsViewController,
         let unitsVC = ControllerHelper.instantiateViewController(identifier: "UnitsViewController") as? UnitsViewController,
-        let stepsVC = ControllerHelper.instantiateViewController(identifier: "StepsViewController") as? StepsViewController else {
+        let lessonVC = ControllerHelper.instantiateViewController(identifier: "LessonViewController") as? LessonViewController else {
             return
         }
         
         sectionsVC.course = course
         sectionsVC.hidesBottomBarWhenPushed = true
         unitsVC.unitId = course.lastStep?.unitId
-        stepsVC.stepId = course.lastStep?.stepId
-        stepsVC.unitId = course.lastStep?.unitId
+        
+        lessonVC.initIds = (stepId: course.lastStep?.stepId, unitId: course.lastStep?.unitId)
         
         //For prev-next step buttons navigation
-        stepsVC.sectionNavigationDelegate = unitsVC
+        lessonVC.sectionNavigationDelegate = unitsVC
 
 
         if course.lastStep?.unitId != nil && course.lastStep?.stepId != nil {
             navigationController?.pushViewController(sectionsVC, animated: false)
             navigationController?.pushViewController(unitsVC, animated: false)
-            navigationController?.pushViewController(stepsVC, animated: true)
+            navigationController?.pushViewController(lessonVC, animated: true)
             AnalyticsReporter.reportEvent(AnalyticsEvents.Continue.stepOpened, parameters: nil)
         } else {
             navigationController?.pushViewController(sectionsVC, animated: true)
@@ -457,6 +463,66 @@ class CoursesViewController: UIViewController, DZNEmptyDataSetSource, DZNEmptyDa
             print("Error while downloading last step")
             errorBlock()
         })
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        
+        let locationInTableView = tableView.convert(location, from: self.view)
+        
+        guard let indexPath = tableView.indexPathForRow(at: locationInTableView) else {
+            return nil
+        }
+        
+        guard indexPath.row < courses.count else {
+            return nil
+        }
+        
+        guard let cell = tableView.cellForRow(at: indexPath) as? CourseTableViewCell else {
+            return nil
+        }
+        
+        if #available(iOS 9.0, *) {
+            previewingContext.sourceRect = cell.frame
+        } else {
+            return nil
+        }
+
+        if !courses[indexPath.row].enrolled {
+            guard let courseVC = ControllerHelper.instantiateViewController(identifier: "CoursePreviewViewController") as? CoursePreviewViewController else {
+                return nil
+            }
+            AnalyticsReporter.reportEvent(AnalyticsEvents.PeekNPop.Course.peeked)
+            courseVC.course = courses[indexPath.row]
+            courseVC.parentShareBlock = {
+                [weak self]
+                shareVC in
+                AnalyticsReporter.reportEvent(AnalyticsEvents.PeekNPop.Course.shared)
+                shareVC.popoverPresentationController?.sourceView = cell
+                self?.present(shareVC, animated: true, completion: nil)
+            }
+            courseVC.hidesBottomBarWhenPushed = true
+            return courseVC
+        } else {
+            guard let courseVC = ControllerHelper.instantiateViewController(identifier: "SectionsViewController") as? SectionsViewController else {
+                return nil
+            }
+            AnalyticsReporter.reportEvent(AnalyticsEvents.PeekNPop.Course.peeked)
+            courseVC.course = courses[indexPath.row]
+            courseVC.parentShareBlock = {
+                [weak self]
+                shareVC in
+                AnalyticsReporter.reportEvent(AnalyticsEvents.PeekNPop.Course.shared)
+                shareVC.popoverPresentationController?.sourceView = cell
+                self?.present(shareVC, animated: true, completion: nil)
+            }
+            courseVC.hidesBottomBarWhenPushed = true
+            return courseVC
+        }
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        show(viewControllerToCommit, sender: self)
+        AnalyticsReporter.reportEvent(AnalyticsEvents.PeekNPop.Course.popped)
     }
 }
 
@@ -527,3 +593,4 @@ extension CoursesViewController : UITableViewDataSource {
         return cell
     }
 }
+
