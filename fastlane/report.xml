@@ -5,37 +5,52 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: Verifying required fastlane version" time="0.004172">
+      <testcase classname="fastlane.lanes" name="0: Verifying required fastlane version" time="0.001086">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: default_platform" time="0.00224">
+      <testcase classname="fastlane.lanes" name="1: default_platform" time="0.000869">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: cocoapods" time="19.209721">
+      <testcase classname="fastlane.lanes" name="2: cocoapods" time="7.57598">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="3: import_certificate" time="2.1488">
+      <testcase classname="fastlane.lanes" name="3: import_certificate" time="0.235256">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="4: import_certificate" time="1.449441">
+      <testcase classname="fastlane.lanes" name="4: import_certificate" time="0.22869">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="5: update_project_provisioning" time="2.71151">
+      <testcase classname="fastlane.lanes" name="5: update_project_provisioning" time="0.628455">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="6: gym" time="972.820116">
+      <testcase classname="fastlane.lanes" name="6: gym" time="255.363193">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="7: get_version_number" time="0.921489">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="8: get_build_number" time="0.596396">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="9: slack" time="0.817073">
         
       </testcase>
     

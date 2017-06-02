@@ -182,7 +182,7 @@ extension CertificatesViewController : DZNEmptyDataSetDelegate {
             break
             
         case .empty:
-            self.tabBarController?.selectedIndex = 1
+            self.tabBarController?.selectedIndex = 0
             break
             
         case .error:

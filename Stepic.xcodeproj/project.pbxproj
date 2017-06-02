@@ -218,6 +218,10 @@
 		084472091D05918E00197166 /* ChoiceQuizTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 084472051D05918E00197166 /* ChoiceQuizTableViewCell.xib */; };
 		0844720B1D05A7D300197166 /* TextHeightDependentCellProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0844720A1D05A7D300197166 /* TextHeightDependentCellProtocol.swift */; };
 		0844720C1D05A7D300197166 /* TextHeightDependentCellProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0844720A1D05A7D300197166 /* TextHeightDependentCellProtocol.swift */; };
+		084A15221EE1D65F007AB9E4 /* ShareableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082348381ECA264000D2CB40 /* ShareableController.swift */; };
+		084A15251EE1DAA9007AB9E4 /* Tokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087D96BA1EBB7F5500059408 /* Tokens.swift */; };
+		084A15261EE1DAAC007AB9E4 /* Tokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087D96BA1EBB7F5500059408 /* Tokens.swift */; };
+		084A15281EE1DFCD007AB9E4 /* StepikAuth.plist in Resources */ = {isa = PBXBuildFile; fileRef = 084A15271EE1DFCD007AB9E4 /* StepikAuth.plist */; };
 		084BD9BB1E5368B600B1901E /* PickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 084BD9BA1E5368B600B1901E /* PickerViewController.swift */; };
 		084C9AF81EC4C11A00AC5C3C /* jquery-3.2.1.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 084C9AF71EC4C11A00AC5C3C /* jquery-3.2.1.min.js */; };
 		084C9AF91EC4C11A00AC5C3C /* jquery-3.2.1.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 084C9AF71EC4C11A00AC5C3C /* jquery-3.2.1.min.js */; };
@@ -329,7 +333,6 @@
 		087B67241EB3CDA700D14D64 /* TextChoiceQuizTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 087B67211EB3CDA700D14D64 /* TextChoiceQuizTableViewCell.xib */; };
 		087B67251EB3CDA700D14D64 /* TextChoiceQuizTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 087B67211EB3CDA700D14D64 /* TextChoiceQuizTableViewCell.xib */; };
 		087D96B91EBB7C7700059408 /* Tokens.plist in Resources */ = {isa = PBXBuildFile; fileRef = 087D96B81EBB7C7700059408 /* Tokens.plist */; };
-		087D96BB1EBB7F5500059408 /* Tokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087D96BA1EBB7F5500059408 /* Tokens.swift */; };
 		087F6B961CE9E2C8002649AB /* HTMLParsingUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F6B951CE9E2C8002649AB /* HTMLParsingUtil.swift */; };
 		087F6B971CE9E2C8002649AB /* HTMLParsingUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F6B951CE9E2C8002649AB /* HTMLParsingUtil.swift */; };
 		087F6B991CEA02AE002649AB /* NotificationDataExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087F6B981CEA02AE002649AB /* NotificationDataExtractor.swift */; };
@@ -416,9 +419,9 @@
 		08A1256F1BDE8E460066B2B2 /* Sorter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A1256E1BDE8E460066B2B2 /* Sorter.swift */; };
 		08A125791BDEBCC90066B2B2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 08A1257B1BDEBCC90066B2B2 /* Localizable.strings */; };
 		08A3A9CE1BD5A14D0032C36E /* NSDateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A3A9CD1BD5A14D0032C36E /* NSDateExtensions.swift */; };
-		08A8A8391E8C641F00D673A6 /* PickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 084BD9BA1E5368B600B1901E /* PickerViewController.swift */; };
 		08A7B0E61EB32E3F00C1BA71 /* AdaptiveAuth.plist in Resources */ = {isa = PBXBuildFile; fileRef = 08A7B0E51EB32E3F00C1BA71 /* AdaptiveAuth.plist */; };
 		08A7B0E81EB340F500C1BA71 /* StepikAuth.plist in Resources */ = {isa = PBXBuildFile; fileRef = 08A7B0E71EB340F500C1BA71 /* StepikAuth.plist */; };
+		08A8A8391E8C641F00D673A6 /* PickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 084BD9BA1E5368B600B1901E /* PickerViewController.swift */; };
 		08AB0B911C240A6800BDB7E7 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AB0B901C240A6800BDB7E7 /* RegistrationViewController.swift */; };
 		08AB82351D74926F00FDEADE /* StepicsAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AB82341D74926F00FDEADE /* StepicsAPI.swift */; };
 		08AB82361D74926F00FDEADE /* StepicsAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AB82341D74926F00FDEADE /* StepicsAPI.swift */; };
@@ -481,11 +484,11 @@
 		08BC47151CDA3E99009A1D25 /* ExecutableTaskTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08BC47131CDA3E99009A1D25 /* ExecutableTaskTypes.swift */; };
 		08C0A4341BF1276C0010F049 /* Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C0A4331BF1276C0010F049 /* Messages.swift */; };
 		08C0A4361BF12CDF0010F049 /* CustomMessagesDesign.json in Resources */ = {isa = PBXBuildFile; fileRef = 08C0A4351BF12CDF0010F049 /* CustomMessagesDesign.json */; };
+		08C194401ED0A05D00A41B72 /* PagerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C1943F1ED0A05D00A41B72 /* PagerController.swift */; };
+		08C194411ED0A05D00A41B72 /* PagerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C1943F1ED0A05D00A41B72 /* PagerController.swift */; };
 		08C1FBBD1E4DB2DF004DEE04 /* WatchSessionDataObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9C714A1E076B3E00EC8DA3 /* WatchSessionDataObserver.swift */; };
 		08C1FBBE1E4DB304004DEE04 /* CourseMetainfoEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F5F3D701E08783E00000423 /* CourseMetainfoEntity.swift */; };
 		08C1FBBF1E4DB30C004DEE04 /* WatchSessionSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9C714B1E076B3E00EC8DA3 /* WatchSessionSender.swift */; };
-		08C194401ED0A05D00A41B72 /* PagerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C1943F1ED0A05D00A41B72 /* PagerController.swift */; };
-		08C194411ED0A05D00A41B72 /* PagerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C1943F1ED0A05D00A41B72 /* PagerController.swift */; };
 		08C21C4B1ED46B5900CE9345 /* wysiwyg.css in Resources */ = {isa = PBXBuildFile; fileRef = 087854F41DF6EE0D00368A50 /* wysiwyg.css */; };
 		08C21C4C1ED46B5E00CE9345 /* jquery-3.2.1.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 084C9AF71EC4C11A00AC5C3C /* jquery-3.2.1.min.js */; };
 		08C4547A1E10306800134E24 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C454791E10306800134E24 /* SignInViewController.swift */; };
@@ -1191,9 +1194,6 @@
 			remoteGlobalIDString = 08DE94101B8C58AC00D278AB;
 			remoteInfo = Stepic;
 		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
 		0865383A1EB02716003A8415 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 08DE94091B8C58AC00D278AB /* Project object */;
@@ -1235,7 +1235,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				9F9C71241E076AE100EC8DA3 /* StepicWatch Extension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1403,6 +1402,7 @@
 		084472041D05918E00197166 /* ChoiceQuizTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChoiceQuizTableViewCell.swift; sourceTree = "<group>"; };
 		084472051D05918E00197166 /* ChoiceQuizTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChoiceQuizTableViewCell.xib; sourceTree = "<group>"; };
 		0844720A1D05A7D300197166 /* TextHeightDependentCellProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextHeightDependentCellProtocol.swift; sourceTree = "<group>"; };
+		084A15271EE1DFCD007AB9E4 /* StepikAuth.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = StepikAuth.plist; path = Sb/StepikAuth.plist; sourceTree = "<group>"; };
 		084A2E5B1D80A83800C6702B /* Model_v8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model_v8.xcdatamodel; sourceTree = "<group>"; };
 		084BD9BA1E5368B600B1901E /* PickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerViewController.swift; sourceTree = "<group>"; };
 		084C7EA61E85A130002D0796 /* Model_steps_restrictions_v14.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model_steps_restrictions_v14.xcdatamodel; sourceTree = "<group>"; };
@@ -1790,6 +1790,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				2AB0C5B809FB5CC644D5B147 /* Pods_Adaptive_1838.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9B4B5B4BA436B264CD40A6B2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3D703F2FD865D9759916771 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2691,6 +2705,7 @@
 		08D121261C93882400A54ABC /* Sb */ = {
 			isa = PBXGroup;
 			children = (
+				084A15271EE1DFCD007AB9E4 /* StepikAuth.plist */,
 				086494841E8C753B0083E0BE /* SberbankUniversity-Info.plist */,
 				086494851E8C753B0083E0BE /* SberbankUniversity.xcassets */,
 				086494861E8C753B0083E0BE /* SberbankUniversity.entitlements */,
@@ -2747,8 +2762,6 @@
 				08DE94111B8C58AC00D278AB /* Stepic.app */,
 				08D121241C937B2200A54ABC /* SberbankUniversity.app */,
 				085D5CD91D007F2100092060 /* StepicTests.xctest */,
-				9F9C71171E076AE000EC8DA3 /* StepicWatch.app */,
-				9F9C71231E076AE000EC8DA3 /* StepicWatch Extension.appex */,
 				86EF29341E83CEA900F8D214 /* Adaptive 1838.app */,
 				086538351EB02715003A8415 /* StickerPackExtension.appex */,
 			);
@@ -3332,7 +3345,7 @@
 			buildPhases = (
 				9F9C71151E076AE000EC8DA3 /* Resources */,
 				9F9C71391E076AE100EC8DA3 /* Embed App Extensions */,
-				F4823D557770D87F640127A2 /* Frameworks */,
+				9B4B5B4BA436B264CD40A6B2 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -3341,7 +3354,6 @@
 			);
 			name = StepicWatch;
 			productName = StepicWatch;
-			productReference = 9F9C71171E076AE000EC8DA3 /* StepicWatch.app */;
 			productType = "com.apple.product-type.application.watchapp2";
 		};
 		9F9C71221E076AE000EC8DA3 /* StepicWatch Extension */ = {
@@ -3349,8 +3361,8 @@
 			buildConfigurationList = 9F9C71381E076AE100EC8DA3 /* Build configuration list for PBXNativeTarget "StepicWatch Extension" */;
 			buildPhases = (
 				9F9C711F1E076AE000EC8DA3 /* Sources */,
-				9F9C71201E076AE000EC8DA3 /* Frameworks */,
 				9F9C71211E076AE000EC8DA3 /* Resources */,
+				F3D703F2FD865D9759916771 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -3358,7 +3370,6 @@
 			);
 			name = "StepicWatch Extension";
 			productName = "StepicWatch Extension";
-			productReference = 9F9C71231E076AE000EC8DA3 /* StepicWatch Extension.appex */;
 			productType = "com.apple.product-type.watchkit2-extension";
 		};
 /* End PBXNativeTarget section */
@@ -3548,6 +3559,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0859AEA31E4F22B500A0D206 /* FillBlanksInputTableViewCell.xib in Resources */,
+				084A15281EE1DFCD007AB9E4 /* StepikAuth.plist in Resources */,
 				083D64A51C175266003222F0 /* SocialNetworkCollectionViewCell.xib in Resources */,
 				08C0A4361BF12CDF0010F049 /* CustomMessagesDesign.json in Resources */,
 				084472081D05918E00197166 /* ChoiceQuizTableViewCell.xib in Resources */,
@@ -3675,8 +3687,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9F9C711D1E076AE000EC8DA3 /* Assets.xcassets in Resources */,
-				9F9C711B1E076AE000EC8DA3 /* Interface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3686,7 +3696,6 @@
 			files = (
 				828CF38E1E0866E40058ACFC /* clock.png in Resources */,
 				08666B5A1E11C53D00799731 /* Localizable.strings in Resources */,
-				9F9C712F1E076AE100EC8DA3 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4111,6 +4120,7 @@
 				083F2B181E9D8F1D00714173 /* CertificatesView.swift in Sources */,
 				0844720C1D05A7D300197166 /* TextHeightDependentCellProtocol.swift in Sources */,
 				08D120BE1C937B2200A54ABC /* UnitsViewController.swift in Sources */,
+				084A15251EE1DAA9007AB9E4 /* Tokens.swift in Sources */,
 				08D120BF1C937B2200A54ABC /* SearchResultsCoursesViewController.swift in Sources */,
 				08D120C01C937B2200A54ABC /* Reply.swift in Sources */,
 				08D120C11C937B2200A54ABC /* AudioManager.swift in Sources */,
@@ -4149,6 +4159,7 @@
 				080CE1591E9566220089A27F /* ViewsAPI.swift in Sources */,
 				0806B2C31EBDBB0200FDE0F7 /* PostViewsExecutableTask.swift in Sources */,
 				0829B83D1E9D05AE009B4A84 /* Certificate+CoreDataProperties.swift in Sources */,
+				084A15221EE1D65F007AB9E4 /* ShareableController.swift in Sources */,
 				080CE15F1E9580CD0089A27F /* AttemptsAPI.swift in Sources */,
 				086A8B261D21434B00F45C45 /* Vote.swift in Sources */,
 				08D120D41C937B2200A54ABC /* GeneralInfoTableViewCell.swift in Sources */,
@@ -4463,7 +4474,6 @@
 				08AB82351D74926F00FDEADE /* StepicsAPI.swift in Sources */,
 				08F5555C1C4FB1E300C877E8 /* ChoiceReply.swift in Sources */,
 				08AEC3A31CCA69C800FFF29E /* DevicesAPI.swift in Sources */,
-				087D96BB1EBB7F5500059408 /* Tokens.swift in Sources */,
 				0884696C1E7C2E01009131E9 /* LastStepGlobalContext.swift in Sources */,
 				080F74661BD924B80064AAEA /* VideoQualityTableViewController.swift in Sources */,
 				08F485AA1C580D61000165AA /* MathReply.swift in Sources */,
@@ -4509,6 +4519,7 @@
 				08F485B11C58EB0D000165AA /* SortingReply.swift in Sources */,
 				084156931BCBFFBD006B8C73 /* Block+CoreDataProperties.swift in Sources */,
 				089142491BCEE4EF0000BCB0 /* Video.swift in Sources */,
+				084A15261EE1DAAC007AB9E4 /* Tokens.swift in Sources */,
 				08B5E29A1BF509C900B875E6 /* UIThreadHelper.swift in Sources */,
 				08AF59EA1E6D9BE800423EFF /* RGPageViewController+UICollectionViewDataSource.swift in Sources */,
 				080EBA331EA64BC000C43C93 /* PresentationContainer.swift in Sources */,
@@ -4938,22 +4949,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9F9C715B1E076B3E00EC8DA3 /* PlaybackCommandEntity.swift in Sources */,
 				9F9C715D1E076B3E00EC8DA3 /* PlaybackStatusEntity.swift in Sources */,
 				08666B611E11C57500799731 /* Localizables.swift in Sources */,
-				9F9C71531E076B3E00EC8DA3 /* WatchSessionDataObserver.swift in Sources */,
-				9F9C71451E076B0000EC8DA3 /* ExtensionDelegate.swift in Sources */,
-				9F9C71421E076B0000EC8DA3 /* CoursesInterfaceController.swift in Sources */,
-				9F9C71511E076B3E00EC8DA3 /* WatchSessionManager.swift in Sources */,
-				9F9C71431E076B0000EC8DA3 /* CourseInfoInterfaceController.swift in Sources */,
-				9F9C71571E076B3E00EC8DA3 /* DataConvertable.swift in Sources */,
-				9F5F3D721E087A6E00000423 /* CourseMetainfoEntity.swift in Sources */,
-				9F9C71471E076B0000EC8DA3 /* DataRowType.swift in Sources */,
-				9F9C71441E076B0000EC8DA3 /* PaybackInterfaceController.swift in Sources */,
-				9F9C71591E076B3E00EC8DA3 /* CoursePlainEntity.swift in Sources */,
-				9F9C71551E076B3E00EC8DA3 /* WatchSessionSender.swift in Sources */,
-				9F9C712D1E076AE100EC8DA3 /* ComplicationController.swift in Sources */,
-				9F9C71461E076B0000EC8DA3 /* CourseRowType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
