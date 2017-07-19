@@ -42,6 +42,8 @@ def all_pods
     pod 'Presentr'
     
     pod 'Agrume', :git => 'https://github.com/Ostrenkiy/Agrume.git', :branch => 'feature/single-horizontal-dismiss'
+    pod 'Highlightr'
+    pod "RFKeyboardToolbar", "~> 1.3"
 end
 
 def testing_pods
