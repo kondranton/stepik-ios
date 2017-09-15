@@ -74,13 +74,14 @@ class TitleContentExpandableMenuBlockTableViewCell: MenuBlockTableViewCell {
 
     private func buildLabel(type: LabelType, text: String) -> UILabel {
         let label = UILabel(frame: CGRect.zero)
-        label.text = text
         label.font = type.font
         switch type {
         case .title:
             label.textColor = block?.titleColor
+            label.text = text
         case .content:
             label.textColor = UIColor.newTextColor
+            label.setTextWithHTMLString(text)
         }
         return label
     }
