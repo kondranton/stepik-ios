@@ -48,25 +48,25 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </view>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NCz-bl-FtZ">
-                        <rect key="frame" x="44" y="8" width="403" height="27"/>
-                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                    <view contentMode="scaleToFill" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="NCz-bl-FtZ" customClass="LaTeXTextView" customModule="Adaptive_1838" customModuleProvider="target">
+                        <rect key="frame" x="44" y="16" width="403" height="11.5"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </view>
                 </subviews>
                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                 <constraints>
                     <constraint firstAttribute="leadingMargin" secondItem="eEG-9I-UvH" secondAttribute="leading" constant="-8" id="4Ke-rT-KkW"/>
-                    <constraint firstAttribute="topMargin" secondItem="NCz-bl-FtZ" secondAttribute="top" id="8wY-L8-voO"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="NCz-bl-FtZ" secondAttribute="bottom" id="KHp-lu-m9D"/>
+                    <constraint firstAttribute="top" secondItem="NCz-bl-FtZ" secondAttribute="top" constant="-16" id="8wY-L8-voO"/>
+                    <constraint firstAttribute="bottom" secondItem="NCz-bl-FtZ" secondAttribute="bottom" constant="16" id="KHp-lu-m9D"/>
                     <constraint firstItem="NCz-bl-FtZ" firstAttribute="leading" secondItem="eEG-9I-UvH" secondAttribute="trailing" constant="8" id="V8W-dK-GbB"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="NCz-bl-FtZ" secondAttribute="trailing" id="WJJ-WE-O2s"/>
+                    <constraint firstAttribute="trailing" secondItem="NCz-bl-FtZ" secondAttribute="trailing" constant="8" id="WJJ-WE-O2s"/>
                     <constraint firstItem="eEG-9I-UvH" firstAttribute="centerY" secondItem="0Jf-kI-aYd" secondAttribute="centerY" id="xhc-TI-y7n"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
             <connections>
                 <outlet property="checkBox" destination="eEG-9I-UvH" id="1hu-EW-5Ba"/>
-                <outlet property="textContainerView" destination="NCz-bl-FtZ" id="kHs-8F-QcE"/>
+                <outlet property="textView" destination="NCz-bl-FtZ" id="blQ-3h-rpC"/>
             </connections>
             <point key="canvasLocation" x="209.5" y="284"/>
         </tableViewCell>

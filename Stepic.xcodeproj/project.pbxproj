@@ -731,6 +731,22 @@
 		08CBA36C1F5B2B8800302154 /* ProfileStreaksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBA3661F5B2B8800302154 /* ProfileStreaksView.swift */; };
 		08CBA36D1F5B2B8800302154 /* ProfileStreaksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBA3661F5B2B8800302154 /* ProfileStreaksView.swift */; };
 		08CBA36E1F5B2B8800302154 /* ProfileStreaksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBA3661F5B2B8800302154 /* ProfileStreaksView.swift */; };
+		08CD257E1F76EA9800E9FADF /* LaTeXTextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08CD257D1F76EA9800E9FADF /* LaTeXTextView.xib */; };
+		08CD257F1F76EA9800E9FADF /* LaTeXTextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08CD257D1F76EA9800E9FADF /* LaTeXTextView.xib */; };
+		08CD25801F76EA9800E9FADF /* LaTeXTextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08CD257D1F76EA9800E9FADF /* LaTeXTextView.xib */; };
+		08CD25811F76EA9800E9FADF /* LaTeXTextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08CD257D1F76EA9800E9FADF /* LaTeXTextView.xib */; };
+		08CD25821F76EA9800E9FADF /* LaTeXTextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08CD257D1F76EA9800E9FADF /* LaTeXTextView.xib */; };
+		08CD25831F76EA9800E9FADF /* LaTeXTextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08CD257D1F76EA9800E9FADF /* LaTeXTextView.xib */; };
+		08CD25841F76EA9800E9FADF /* LaTeXTextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08CD257D1F76EA9800E9FADF /* LaTeXTextView.xib */; };
+		08CD25851F76EA9800E9FADF /* LaTeXTextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08CD257D1F76EA9800E9FADF /* LaTeXTextView.xib */; };
+		08CD25871F76EABB00E9FADF /* LaTeXTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CD25861F76EABB00E9FADF /* LaTeXTextView.swift */; };
+		08CD25881F76EABB00E9FADF /* LaTeXTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CD25861F76EABB00E9FADF /* LaTeXTextView.swift */; };
+		08CD25891F76EABB00E9FADF /* LaTeXTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CD25861F76EABB00E9FADF /* LaTeXTextView.swift */; };
+		08CD258A1F76EABB00E9FADF /* LaTeXTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CD25861F76EABB00E9FADF /* LaTeXTextView.swift */; };
+		08CD258B1F76EABB00E9FADF /* LaTeXTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CD25861F76EABB00E9FADF /* LaTeXTextView.swift */; };
+		08CD258C1F76EABB00E9FADF /* LaTeXTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CD25861F76EABB00E9FADF /* LaTeXTextView.swift */; };
+		08CD258D1F76EABB00E9FADF /* LaTeXTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CD25861F76EABB00E9FADF /* LaTeXTextView.swift */; };
+		08CD258E1F76EABB00E9FADF /* LaTeXTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CD25861F76EABB00E9FADF /* LaTeXTextView.swift */; };
 		08CE16E01BFA5A80008511B7 /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CE16DF1BFA5A80008511B7 /* DeviceInfo.swift */; };
 		08D035211D65A252003515C6 /* AnalyticsEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D035201D65A252003515C6 /* AnalyticsEvents.swift */; };
 		08D035221D65A252003515C6 /* AnalyticsEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D035201D65A252003515C6 /* AnalyticsEvents.swift */; };
@@ -4430,6 +4446,8 @@
 		08CBA3531F5A2D9400302154 /* Profile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
 		08CBA35D1F5AFDCF00302154 /* ProfileStreaksView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileStreaksView.xib; sourceTree = "<group>"; };
 		08CBA3661F5B2B8800302154 /* ProfileStreaksView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileStreaksView.swift; sourceTree = "<group>"; };
+		08CD257D1F76EA9800E9FADF /* LaTeXTextView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LaTeXTextView.xib; sourceTree = "<group>"; };
+		08CD25861F76EABB00E9FADF /* LaTeXTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaTeXTextView.swift; sourceTree = "<group>"; };
 		08CE16DF1BFA5A80008511B7 /* DeviceInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
 		08D035201D65A252003515C6 /* AnalyticsEvents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsEvents.swift; sourceTree = "<group>"; };
 		08D035241D65B5E5003515C6 /* AnalyticsReporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsReporter.swift; sourceTree = "<group>"; };
@@ -5670,6 +5688,7 @@
 		086E965C1BF6682000AB952D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				08CD257C1F76EA7300E9FADF /* LaTeXTextView */,
 				08F476201E82C12B0018E82C /* StreaksView */,
 				08970EC91C6A325600846119 /* PlaceholderView */,
 				08F485911C574CFC000165AA /* VideoDownloadView */,
@@ -6099,6 +6118,15 @@
 				08CBA3661F5B2B8800302154 /* ProfileStreaksView.swift */,
 			);
 			name = ProfileStreaksView;
+			sourceTree = "<group>";
+		};
+		08CD257C1F76EA7300E9FADF /* LaTeXTextView */ = {
+			isa = PBXGroup;
+			children = (
+				08CD257D1F76EA9800E9FADF /* LaTeXTextView.xib */,
+				08CD25861F76EABB00E9FADF /* LaTeXTextView.swift */,
+			);
+			name = LaTeXTextView;
 			sourceTree = "<group>";
 		};
 		08D035231D65B5C5003515C6 /* Analytics */ = {
@@ -7746,6 +7774,7 @@
 				08AC213A1CDD34C300FBB9CD /* Tasks.plist in Resources */,
 				08D121121C937B2200A54ABC /* Main.storyboard in Resources */,
 				080E81021F0146EF00DC0EA5 /* FullscreenCodeQuizViewController.xib in Resources */,
+				08CD257F1F76EA9800E9FADF /* LaTeXTextView.xib in Resources */,
 				0859AEA41E4F22B500A0D206 /* FillBlanksInputTableViewCell.xib in Resources */,
 				086494A61E8C7A3B0083E0BE /* SbLaunchScreen.xib in Resources */,
 				0867D8321E8531F700B13285 /* CurrentBestStreakViewController.xib in Resources */,
@@ -7842,6 +7871,7 @@
 				083622DC1CD1FA6700CD8915 /* StepTabView.xib in Resources */,
 				08970ED81C6A36E500846119 /* PlaceholderView.storyboard in Resources */,
 				08F485951C574DAD000165AA /* WarningView.xib in Resources */,
+				08CD257E1F76EA9800E9FADF /* LaTeXTextView.xib in Resources */,
 				085E9E781F18ED7000D6A4BC /* SignInCoursesTableViewCell.xib in Resources */,
 				089056131E98021000B8FE6A /* RateAppViewController.xib in Resources */,
 				0869F6D81CE3684000F8A6DB /* default_sound.wav in Resources */,
@@ -7930,6 +7960,7 @@
 				2C1B62861F4C4AEF00236804 /* UnknownTypeQuizViewController.xib in Resources */,
 				2C1B62871F4C4AEF00236804 /* CodeInputAccessoryCollectionViewCell.xib in Resources */,
 				08CBA3351F57563C00302154 /* TransitionMenuBlockTableViewCell.xib in Resources */,
+				08CD25841F76EA9800E9FADF /* LaTeXTextView.xib in Resources */,
 				2C1B62891F4C4AEF00236804 /* ChoiceQuizTableViewCell.xib in Resources */,
 				2C1B628A1F4C4AEF00236804 /* SortingQuizTableViewCell.xib in Resources */,
 				2C1B628B1F4C4AEF00236804 /* CodeQuizToolbarView.xib in Resources */,
@@ -8025,6 +8056,7 @@
 				2C1B64981F4C590700236804 /* SearchSuggestionTableViewCell.xib in Resources */,
 				2C1B64E81F4C5A9E00236804 /* Icons.xcassets in Resources */,
 				08CBA3361F57563C00302154 /* TransitionMenuBlockTableViewCell.xib in Resources */,
+				08CD25851F76EA9800E9FADF /* LaTeXTextView.xib in Resources */,
 				2C1B649A1F4C590700236804 /* UnknownTypeQuizViewController.xib in Resources */,
 				2C1B649B1F4C590700236804 /* CodeInputAccessoryCollectionViewCell.xib in Resources */,
 				2C1B649E1F4C590700236804 /* ChoiceQuizTableViewCell.xib in Resources */,
@@ -8110,6 +8142,7 @@
 				2C35C4E81F4DA48E002F3BF4 /* nouns_m.plist in Resources */,
 				2C8654231F4B33DE00D51654 /* DiscussionWebTableViewCell.xib in Resources */,
 				2C8654241F4B33DE00D51654 /* CardOverlayView.xib in Resources */,
+				08CD25811F76EA9800E9FADF /* LaTeXTextView.xib in Resources */,
 				2C8654251F4B33DE00D51654 /* DiscussionTableViewCell.xib in Resources */,
 				2C8654261F4B33DE00D51654 /* DiscussionsViewController.xib in Resources */,
 				2C8654291F4B33DE00D51654 /* LoadMoreTableViewCell.xib in Resources */,
@@ -8206,6 +8239,7 @@
 				2C35C4E91F4DA48E002F3BF4 /* nouns_m.plist in Resources */,
 				2C89AB0B1F4C289900227C3B /* CardOverlayView.xib in Resources */,
 				2C89AB0D1F4C289900227C3B /* DiscussionTableViewCell.xib in Resources */,
+				08CD25821F76EA9800E9FADF /* LaTeXTextView.xib in Resources */,
 				2C89AB0E1F4C289900227C3B /* DiscussionsViewController.xib in Resources */,
 				2C89AB0F1F4C289900227C3B /* LoadMoreTableViewCell.xib in Resources */,
 				2C89AB101F4C289900227C3B /* DiscussionsStoryboard.storyboard in Resources */,
@@ -8312,6 +8346,7 @@
 				2C9732C81F4C38F600AC9301 /* SearchSuggestionTableViewCell.xib in Resources */,
 				2C97330C1F4C394A00AC9301 /* Icons.xcassets in Resources */,
 				08CBA3341F57563C00302154 /* TransitionMenuBlockTableViewCell.xib in Resources */,
+				08CD25831F76EA9800E9FADF /* LaTeXTextView.xib in Resources */,
 				2C9732C91F4C38F600AC9301 /* UnknownTypeQuizViewController.xib in Resources */,
 				2C9732CA1F4C38F600AC9301 /* CodeInputAccessoryCollectionViewCell.xib in Resources */,
 				2C9732CB1F4C38F600AC9301 /* ChoiceQuizTableViewCell.xib in Resources */,
@@ -8455,6 +8490,7 @@
 				86AE947F1E84511A00F67691 /* UnknownTypeQuizViewController.xib in Resources */,
 				0888D1071F1E41FF00A16863 /* CodeInputAccessoryCollectionViewCell.xib in Resources */,
 				08CBA3311F57563C00302154 /* TransitionMenuBlockTableViewCell.xib in Resources */,
+				08CD25801F76EA9800E9FADF /* LaTeXTextView.xib in Resources */,
 				86AE94801E84511A00F67691 /* ChoiceQuizTableViewCell.xib in Resources */,
 				86AE94811E84511A00F67691 /* SortingQuizTableViewCell.xib in Resources */,
 				080C5E741EFC094F0036EB3D /* CodeQuizToolbarView.xib in Resources */,
@@ -10114,6 +10150,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08CD25881F76EABB00E9FADF /* LaTeXTextView.swift in Sources */,
 				08758A9B1CDB99C400159233 /* DevicesAPI.swift in Sources */,
 				08D120751C937B2200A54ABC /* Course.swift in Sources */,
 				0890560E1E97CE1800B8FE6A /* LaunchDefaultsContainer.swift in Sources */,
@@ -10821,6 +10858,7 @@
 				0890560D1E97CE1800B8FE6A /* LaunchDefaultsContainer.swift in Sources */,
 				0828FF8C1BC81F41000AFEA7 /* UnitTableViewCell.swift in Sources */,
 				08901E701CD111F200D94613 /* VersionUpdateAlertConstructor.swift in Sources */,
+				08CD25871F76EABB00E9FADF /* LaTeXTextView.swift in Sources */,
 				0837492D1DE5B07900144C14 /* AlertManager.swift in Sources */,
 				08DF78D21F64059900AEEA85 /* StepikLabel.swift in Sources */,
 				08AF59EC1E6D9BE800423EFF /* RGPageViewController+UICollectionViewDelegate.swift in Sources */,
@@ -11023,6 +11061,7 @@
 				2C1B61581F4C4AEF00236804 /* AdaptiveStatsViewController.swift in Sources */,
 				2C1B615C1F4C4AEF00236804 /* CourseTableViewCell.swift in Sources */,
 				2C1B615D1F4C4AEF00236804 /* Achievement.swift in Sources */,
+				08CD258D1F76EABB00E9FADF /* LaTeXTextView.swift in Sources */,
 				2C1B615E1F4C4AEF00236804 /* FindCoursesViewController.swift in Sources */,
 				2C1B615F1F4C4AEF00236804 /* MyCoursesViewController.swift in Sources */,
 				2C1B61601F4C4AEF00236804 /* CoursesViewController.swift in Sources */,
@@ -11440,6 +11479,7 @@
 				2C1B63691F4C590700236804 /* AdaptiveStatsViewController.swift in Sources */,
 				2C1B636D1F4C590700236804 /* CourseTableViewCell.swift in Sources */,
 				2C1B636E1F4C590700236804 /* Achievement.swift in Sources */,
+				08CD258E1F76EABB00E9FADF /* LaTeXTextView.swift in Sources */,
 				2C1B636F1F4C590700236804 /* FindCoursesViewController.swift in Sources */,
 				2C1B63701F4C590700236804 /* MyCoursesViewController.swift in Sources */,
 				2C1B63711F4C590700236804 /* CoursesViewController.swift in Sources */,
@@ -11857,6 +11897,7 @@
 				2C8653061F4B33DE00D51654 /* AdaptiveStatsViewController.swift in Sources */,
 				2C86530A1F4B33DE00D51654 /* CourseTableViewCell.swift in Sources */,
 				2C86530B1F4B33DE00D51654 /* Achievement.swift in Sources */,
+				08CD258A1F76EABB00E9FADF /* LaTeXTextView.swift in Sources */,
 				2C86530C1F4B33DE00D51654 /* FindCoursesViewController.swift in Sources */,
 				2C86530D1F4B33DE00D51654 /* MyCoursesViewController.swift in Sources */,
 				2C86530E1F4B33DE00D51654 /* CoursesViewController.swift in Sources */,
@@ -12274,6 +12315,7 @@
 				2C89A9EC1F4C289900227C3B /* AdaptiveStatsViewController.swift in Sources */,
 				2C89A9F01F4C289900227C3B /* CourseTableViewCell.swift in Sources */,
 				2C89A9F11F4C289900227C3B /* Achievement.swift in Sources */,
+				08CD258B1F76EABB00E9FADF /* LaTeXTextView.swift in Sources */,
 				2C89A9F21F4C289900227C3B /* FindCoursesViewController.swift in Sources */,
 				2C89A9F31F4C289900227C3B /* MyCoursesViewController.swift in Sources */,
 				2C89A9F41F4C289900227C3B /* CoursesViewController.swift in Sources */,
@@ -12691,6 +12733,7 @@
 				2C9731A01F4C38F600AC9301 /* AdaptiveStatsViewController.swift in Sources */,
 				2C9731A41F4C38F600AC9301 /* CourseTableViewCell.swift in Sources */,
 				2C9731A51F4C38F600AC9301 /* Achievement.swift in Sources */,
+				08CD258C1F76EABB00E9FADF /* LaTeXTextView.swift in Sources */,
 				2C9731A61F4C38F600AC9301 /* FindCoursesViewController.swift in Sources */,
 				2C9731A71F4C38F600AC9301 /* MyCoursesViewController.swift in Sources */,
 				2C9731A81F4C38F600AC9301 /* CoursesViewController.swift in Sources */,
@@ -13162,6 +13205,7 @@
 				2C1649671F2A0842002C9F99 /* AdaptiveStatsViewController.swift in Sources */,
 				864D67B91E83E08E001E8D9E /* CourseTableViewCell.swift in Sources */,
 				2C6640CA1F2F35E60033A274 /* Achievement.swift in Sources */,
+				08CD25891F76EABB00E9FADF /* LaTeXTextView.swift in Sources */,
 				864D67BB1E83E08E001E8D9E /* FindCoursesViewController.swift in Sources */,
 				864D67BC1E83E08E001E8D9E /* MyCoursesViewController.swift in Sources */,
 				864D67BD1E83E08E001E8D9E /* CoursesViewController.swift in Sources */,

@@ -17,10 +17,7 @@ class ChoiceQuizViewController: QuizViewController {
 
     var dataset: ChoiceDataset?
     var reply: ChoiceReply?
-
-    var cellHeights: [CGFloat?] = []
-
-    var didReload: Bool = false
+    var webCellIndices: [IndexPath] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,11 +26,22 @@ class ChoiceQuizViewController: QuizViewController {
         tableView.isScrollEnabled = false
         self.containerView.addSubview(tableView)
         tableView.align(toView: self.containerView)
+        tableView.setContentHuggingPriority(200, for: .vertical)
+        tableView.setContentCompressionResistancePriority(900, for: .vertical)
         tableView.backgroundColor = UIColor.clear
         tableView.delegate = self
         tableView.dataSource = self
 
+        tableView.estimatedRowHeight = 44.0
+        tableView.rowHeight = UITableViewAutomaticDimension
+
         tableView.register(UINib(nibName: "ChoiceQuizTableViewCell", bundle: nil), forCellReuseIdentifier: "ChoiceQuizTableViewCell")
+    }
+
+    fileprivate func reload() {
+        webCellIndices = []
+        tableView.reloadData()
+        tableView.invalidateIntrinsicContentSize()
     }
 
     fileprivate func hasTagsInDataset(dataset: ChoiceDataset) -> Bool {
@@ -65,9 +73,8 @@ class ChoiceQuizViewController: QuizViewController {
         self.dataset = dataset
 
         self.choices = [Bool](repeating: false, count: optionsCount)
-        self.cellHeights = Array(repeating: nil, count: optionsCount)
-        didReload = false
-        tableView.reloadData()
+        reload()
+        view.layoutSubviews()
         self.tableView.isUserInteractionEnabled = true
     }
 
@@ -88,7 +95,8 @@ class ChoiceQuizViewController: QuizViewController {
         }
 
         self.choices = reply.choices
-        self.tableView.reloadData()
+        reload()
+        view.layoutSubviews()
     }
 
     override func getReply() -> Reply {
@@ -102,25 +110,12 @@ class ChoiceQuizViewController: QuizViewController {
             [weak self]
             _ in
             guard let s = self else { return }
-            s.cellHeights = Array(repeating: nil, count: s.optionsCount)
-            s.didReload = false
-            s.tableView.reloadData()
+            s.tableView.reloadRows(at: s.webCellIndices, with: .automatic)
         }
     }
 }
 
 extension ChoiceQuizViewController : UITableViewDelegate {
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let dataset = dataset else {
-            return 0
-        }
-        if let height = cellHeights[indexPath.row] {
-            return height
-        } else {
-            return ChoiceQuizTableViewCell.getHeightForText(text: dataset.options[indexPath.row], width: tableView.bounds.width)
-        }
-    }
 
     func setAllCellsOff() {
         let indexPaths = (0..<self.tableView.numberOfRows(inSection: 0)).map({return IndexPath(row: $0, section: 0)})
@@ -178,28 +173,18 @@ extension ChoiceQuizViewController : UITableViewDataSource {
 
         let cell = tableView.dequeueReusableCell(withIdentifier: "ChoiceQuizTableViewCell", for:indexPath) as! ChoiceQuizTableViewCell
         cell.setHTMLText(dataset.options[indexPath.row], width: self.tableView.bounds.width, finishedBlock: {
-            [weak self]
-            newHeight in
-
+            [weak self] in
             guard let s = self else { return }
-            if s.didReload { return }
 
-            s.cellHeights[indexPath.row] = newHeight
-            var sum: CGFloat = 0
-            for height in s.cellHeights {
-                if height == nil {
-                    return
-                } else {
-                    sum += height!
-                }
-            }
             UIThread.performUI {
-                s.didReload = true
-                s.tableView.contentSize = CGSize(width: s.tableView.contentSize.width, height: sum)
                 s.tableView.beginUpdates()
                 s.tableView.endUpdates()
+                s.view.layoutSubviews()
             }
         })
+        if cell.textView.state == .web {
+            webCellIndices += [indexPath]
+        }
 
         if dataset.isMultipleChoice {
             cell.checkBox.boxType = .square
