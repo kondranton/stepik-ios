@@ -21,7 +21,7 @@ class FullHeightTableView: UITableView {
 
     override func beginUpdates() {
         super.beginUpdates()
-        self.invalidateIntrinsicContentSize()
+//        self.invalidateIntrinsicContentSize()
     }
 
     override func endUpdates() {

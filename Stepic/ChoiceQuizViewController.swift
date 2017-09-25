@@ -17,7 +17,7 @@ class ChoiceQuizViewController: QuizViewController {
 
     var dataset: ChoiceDataset?
     var reply: ChoiceReply?
-    var webCellIndices: [IndexPath] = []
+    var webCellIndices = Set<IndexPath>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,8 +32,8 @@ class ChoiceQuizViewController: QuizViewController {
         tableView.delegate = self
         tableView.dataSource = self
 
-        tableView.estimatedRowHeight = 44.0
-        tableView.rowHeight = UITableViewAutomaticDimension
+//        tableView.estimatedRowHeight = 44.0
+//        tableView.rowHeight = UITableViewAutomaticDimension
 
         tableView.register(UINib(nibName: "ChoiceQuizTableViewCell", bundle: nil), forCellReuseIdentifier: "ChoiceQuizTableViewCell")
     }
@@ -41,7 +41,7 @@ class ChoiceQuizViewController: QuizViewController {
     fileprivate func reload() {
         webCellIndices = []
         tableView.reloadData()
-        tableView.invalidateIntrinsicContentSize()
+//        tableView.invalidateIntrinsicContentSize()
     }
 
     fileprivate func hasTagsInDataset(dataset: ChoiceDataset) -> Bool {
@@ -106,11 +106,32 @@ class ChoiceQuizViewController: QuizViewController {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
 
+//        coordinator.animate(alongsideTransition: {
+//            [weak self]
+//            _ in
+//            guard let s = self else { return }
+//            CATransaction.begin()
+//            s.tableView.beginUpdates()
+//            print("reloading rows \(Array(s.webCellIndices.map{$0.row})) on rotation")
+//            s.tableView.reloadRows(at: Array(s.webCellIndices), with: .automatic)
+//            s.tableView.endUpdates()
+//            //            s.tableView.invalidateIntrinsicContentSize()
+//            s.view.layoutSubviews()
+//            CATransaction.commit()
+//        }, completion: nil)
         coordinator.animate(alongsideTransition: nil) {
             [weak self]
             _ in
             guard let s = self else { return }
-            s.tableView.reloadRows(at: s.webCellIndices, with: .automatic)
+//            s.reload()
+            CATransaction.begin()
+            s.tableView.beginUpdates()
+            print("reloading rows \(Array(s.webCellIndices.map{$0.row})) on rotation")
+            s.tableView.reloadRows(at: Array(s.webCellIndices), with: .automatic)
+            s.tableView.endUpdates()
+            //            s.tableView.invalidateIntrinsicContentSize()
+            s.view.layoutSubviews()
+            CATransaction.commit()
         }
     }
 }
@@ -124,6 +145,20 @@ extension ChoiceQuizViewController : UITableViewDelegate {
                 cell.checkBox.on = false
             }
         }
+    }
+
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard let dataset = dataset else {
+            return 0
+        }
+//        print("ESTIMATED height for \(indexPath) -> \(ChoiceQuizTableViewCell.getHeightForText(text: dataset.options[indexPath.row], width: tableView.bounds.width))")
+
+        return ChoiceQuizTableViewCell.getHeightForText(text: dataset.options[indexPath.row], width: tableView.bounds.width)
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        print("height for \(indexPath) -> \(UITableViewAutomaticDimension)")
+        return UITableViewAutomaticDimension
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -170,20 +205,23 @@ extension ChoiceQuizViewController : UITableViewDataSource {
         guard let dataset = dataset else {
             return UITableViewCell()
         }
-
+        print("in cellForRow \(indexPath.row)")
         let cell = tableView.dequeueReusableCell(withIdentifier: "ChoiceQuizTableViewCell", for:indexPath) as! ChoiceQuizTableViewCell
         cell.setHTMLText(dataset.options[indexPath.row], width: self.tableView.bounds.width, finishedBlock: {
             [weak self] in
             guard let s = self else { return }
 
             UIThread.performUI {
+                CATransaction.begin()
                 s.tableView.beginUpdates()
                 s.tableView.endUpdates()
+//                s.tableView.invalidateIntrinsicContentSize()
                 s.view.layoutSubviews()
+                CATransaction.commit()
             }
         })
         if cell.textView.state == .web {
-            webCellIndices += [indexPath]
+            webCellIndices.insert(indexPath)
         }
 
         if dataset.isMultipleChoice {

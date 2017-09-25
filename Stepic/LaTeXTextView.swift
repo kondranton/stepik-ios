@@ -29,7 +29,7 @@ class LaTeXTextView: NibInitializableView {
             switch state {
             case .plain:
                 view.addSubview(label)
-                label.align(toView: self.view)
+                label.alignTop("0", leading: "8", bottom: "0", trailing: "-8", toView: self.view)
                 view.layoutSubviews()
                 break
             case .web:
@@ -60,6 +60,7 @@ class LaTeXTextView: NibInitializableView {
     private func setPlain(text: String) {
         state = .plain
         label.text = text
+        print("Added label LaTeXTextView subview with text -> \(text)")
         self.view.invalidateIntrinsicContentSize()
     }
 
@@ -93,6 +94,7 @@ class LaTeXTextView: NibInitializableView {
     override var intrinsicContentSize: CGSize {
         switch state {
         case .plain:
+            print("intrinsic content size for label with text: \(label.text) \n size -> \(label.intrinsicContentSize) screen width -> \(UIScreen.main.bounds.width)")
             return label.intrinsicContentSize
         case .web:
             return webView.intrinsicContentSize
