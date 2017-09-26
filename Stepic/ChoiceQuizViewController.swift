@@ -57,6 +57,12 @@ class ChoiceQuizViewController: QuizViewController {
         return dataset?.options.count ?? 0
     }
 
+    func reload() {
+        tableView.reloadData()
+        tableView.invalidateIntrinsicContentSize()
+        self.view.layoutSubviews()
+    }
+    
     override func display(dataset: Dataset) {
         guard let dataset = dataset as? ChoiceDataset else {
             return
@@ -67,7 +73,7 @@ class ChoiceQuizViewController: QuizViewController {
         self.choices = [Bool](repeating: false, count: optionsCount)
         self.cellHeights = Array(repeating: nil, count: optionsCount)
         didReload = false
-        tableView.reloadData()
+        reload()
         self.tableView.isUserInteractionEnabled = true
     }
 
@@ -88,7 +94,7 @@ class ChoiceQuizViewController: QuizViewController {
         }
 
         self.choices = reply.choices
-        self.tableView.reloadData()
+        reload()
     }
 
     override func getReply() -> Reply {
@@ -104,7 +110,7 @@ class ChoiceQuizViewController: QuizViewController {
             guard let s = self else { return }
             s.cellHeights = Array(repeating: nil, count: s.optionsCount)
             s.didReload = false
-            s.tableView.reloadData()
+            s.reload()
         }
     }
 }
@@ -196,10 +202,20 @@ extension ChoiceQuizViewController : UITableViewDataSource {
             UIThread.performUI {
                 s.didReload = true
                 s.tableView.contentSize = CGSize(width: s.tableView.contentSize.width, height: sum)
+                CATransaction.begin()
+                CATransaction.setCompletionBlock({
+                    s.tableView.invalidateIntrinsicContentSize()
+                    s.view.layoutSubviews()
+                })
                 s.tableView.beginUpdates()
                 s.tableView.endUpdates()
+                CATransaction.commit()
+                
             }
         })
+
+//        tableView.invalidateIntrinsicContentSize()
+//        view.layoutSubviews()
 
         if dataset.isMultipleChoice {
             cell.checkBox.boxType = .square
