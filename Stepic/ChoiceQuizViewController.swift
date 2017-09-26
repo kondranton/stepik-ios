@@ -210,7 +210,6 @@ extension ChoiceQuizViewController : UITableViewDataSource {
                 s.tableView.beginUpdates()
                 s.tableView.endUpdates()
                 CATransaction.commit()
-                
             }
         })
 

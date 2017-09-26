@@ -41,6 +41,12 @@ class SortingQuizViewController: QuizViewController {
         return dataset?.options.count ?? 0
     }
 
+    func reload() {
+        tableView.reloadData()
+        tableView.invalidateIntrinsicContentSize()
+        self.view.layoutSubviews()
+    }
+    
     override func display(dataset: Dataset) {
         guard let dataset = dataset as? SortingDataset else {
             return
@@ -52,7 +58,7 @@ class SortingQuizViewController: QuizViewController {
 
         self.cellHeights = Array(repeating: nil, count: optionsCount)
         didReload = false
-        tableView.reloadData()
+        reload()
         self.tableView.isUserInteractionEnabled = true
     }
 
@@ -80,7 +86,7 @@ class SortingQuizViewController: QuizViewController {
             o[index] = dataset.options[order]
         }
         orderedOptions = o
-        self.tableView.reloadData()
+        reload()
     }
 
     fileprivate func resetOptionsToDataset() {
@@ -109,7 +115,7 @@ class SortingQuizViewController: QuizViewController {
             guard let s = self else { return }
             s.cellHeights = Array(repeating: nil, count: s.optionsCount)
             s.didReload = false
-            s.tableView.reloadData()
+            s.reload()
         }
     }
 
@@ -186,8 +192,14 @@ extension SortingQuizViewController : UITableViewDataSource {
             UIThread.performUI {
                 s.didReload = true
                 s.tableView.contentSize = CGSize(width: s.tableView.contentSize.width, height: sum)
+                CATransaction.begin()
+                CATransaction.setCompletionBlock({
+                    s.tableView.invalidateIntrinsicContentSize()
+                    s.view.layoutSubviews()
+                })
                 s.tableView.beginUpdates()
                 s.tableView.endUpdates()
+                CATransaction.commit()
             }
         })
 
