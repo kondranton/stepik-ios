@@ -32,16 +32,14 @@ class ChoiceQuizViewController: QuizViewController {
         tableView.delegate = self
         tableView.dataSource = self
 
-//        tableView.estimatedRowHeight = 44.0
-//        tableView.rowHeight = UITableViewAutomaticDimension
-
         tableView.register(UINib(nibName: "ChoiceQuizTableViewCell", bundle: nil), forCellReuseIdentifier: "ChoiceQuizTableViewCell")
     }
 
     fileprivate func reload() {
         webCellIndices = []
         tableView.reloadData()
-//        tableView.invalidateIntrinsicContentSize()
+        tableView.invalidateIntrinsicContentSize()
+        tableView.layoutSubviews()
     }
 
     fileprivate func hasTagsInDataset(dataset: ChoiceDataset) -> Bool {
@@ -123,14 +121,21 @@ class ChoiceQuizViewController: QuizViewController {
             [weak self]
             _ in
             guard let s = self else { return }
-//            s.reload()
+            s.reload()
             CATransaction.begin()
             s.tableView.beginUpdates()
-            print("reloading rows \(Array(s.webCellIndices.map{$0.row})) on rotation")
+            CATransaction.setCompletionBlock({
+                [weak self] in
+                self?.tableView.invalidateIntrinsicContentSize()
+                self?.view.layoutSubviews()
+
+            })
+//            print("reloading rows \(Array(s.webCellIndices.map{$0.row})) on rotation")
             s.tableView.reloadRows(at: Array(s.webCellIndices), with: .automatic)
+            s.tableView.reloadData()
+//            self?.tableView.invalidateIntrinsicContentSize()
+//            self?.view.layoutSubviews()
             s.tableView.endUpdates()
-            //            s.tableView.invalidateIntrinsicContentSize()
-            s.view.layoutSubviews()
             CATransaction.commit()
         }
     }
@@ -215,14 +220,18 @@ extension ChoiceQuizViewController : UITableViewDataSource {
                 CATransaction.begin()
                 s.tableView.beginUpdates()
                 s.tableView.endUpdates()
-//                s.tableView.invalidateIntrinsicContentSize()
-                s.view.layoutSubviews()
+                CATransaction.setCompletionBlock({
+                    s.tableView.invalidateIntrinsicContentSize()
+                    s.view.layoutSubviews()
+                })
                 CATransaction.commit()
             }
         })
-        if cell.textView.state == .web {
-            webCellIndices.insert(indexPath)
-        }
+        tableView.invalidateIntrinsicContentSize()
+        view.layoutSubviews()
+//        if cell.textView.state == .web {
+//            webCellIndices.insert(indexPath)
+//        }
 
         if dataset.isMultipleChoice {
             cell.checkBox.boxType = .square

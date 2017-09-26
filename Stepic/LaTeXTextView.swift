@@ -61,7 +61,8 @@ class LaTeXTextView: NibInitializableView {
         state = .plain
         label.text = text
         print("Added label LaTeXTextView subview with text -> \(text)")
-        self.view.invalidateIntrinsicContentSize()
+        self.view.layoutSubviews()
+//        self.invalidateIntrinsicContentSize()
     }
 
     private func setWeb(text: String) {
@@ -70,6 +71,9 @@ class LaTeXTextView: NibInitializableView {
             [weak self] in
             if let webView = self?.webView {
                 webView.constrainHeight("\(webView.contentHeight)")
+//                self?.view.layoutSubviews()
+                self?.invalidateIntrinsicContentSize()
+                print("updated height to \(webView.contentHeight)")
                 self?.updateHeightBlock?()
             }
         }
@@ -91,12 +95,25 @@ class LaTeXTextView: NibInitializableView {
         label.backgroundColor = UIColor.clear
     }
 
+    override func invalidateIntrinsicContentSize() {
+        switch state {
+        case .plain:
+            label.invalidateIntrinsicContentSize()
+        case .web:
+            webView.invalidateIntrinsicContentSize()
+        }
+        self.view.invalidateIntrinsicContentSize()
+        super.invalidateIntrinsicContentSize()
+    }
+    
     override var intrinsicContentSize: CGSize {
         switch state {
         case .plain:
+            label.invalidateIntrinsicContentSize()
             print("intrinsic content size for label with text: \(label.text) \n size -> \(label.intrinsicContentSize) screen width -> \(UIScreen.main.bounds.width)")
             return label.intrinsicContentSize
         case .web:
+            webView.invalidateIntrinsicContentSize()
             return webView.intrinsicContentSize
         }
     }
